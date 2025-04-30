@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tamagotchi</title>
+    <!-- Vincular estilos -->
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="pantallaInicial.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Pantalla inicial -->
+    <div id="pantalla-inicial" class="pantalla-superpuesta">
+        <div class="contenedor-inicial">
+            <h2 id="mensaje-bienvenida">¡Bienvenido!</h2>
+            <div id="formulario-nombre" style="display: none;">
+                <label for="nombre-tamagotchi">Ingrese el nombre de su Tamagotchi:</label>
+                <input type="text" id="nombre-tamagotchi" placeholder="Nombre">
+                <button id="crear-tamagotchi">Adoptar</button>
+            </div>
+            <button id="continuar-juego" style="display: none;">Continuar</button>
+        </div>
+    </div>
+
+    <!-- Pantalla de muerte -->
+    <div id="pantalla-muerte" class="pantalla-superpuesta">
+        <div class="contenedor-inicial">
+            <h1 id="mensaje-muerte" style="display: none;"></h1>
+            <button id="reiniciar-Tamagotchi" style="display: none;">Reiniciar</button>
+        </div>
+    </div>
+
+    <!-- Contenedor principal -->
+    <div class="contenedor-principal">
+        <div class="contenedor-contenido">
+            <!-- Lado izquierdo: Barras y nombre -->
+            <div class="lado-izquierdo">
+                <div id="nombre-dragon">Nombre del Dragón</div>
+
+                <div id="minijuego-container" style="display: none;">
+                    <iframe id="gameFrame" src="" width="500" height="500"></iframe>
+                </div>
+
+                <div class="barras-estado">
+
+                    <div class="estado">
+                        <label for="barra-hambre">Hambre</label>
+                        <div class="contenedor-barra">
+                            <div id="barra-hambre" class="barra" style="width: 80%;"></div>
+                        </div>
+                    </div>
+                    <div class="estado">
+                        <label for="barra-felicidad">Felicidad</label>
+                        <div class="contenedor-barra">
+                            <div id="barra-felicidad" class="barra" style="width: 50%;"></div>
+                        </div>
+                    </div>
+                    <div class="estado">
+                        <label for="barra-energia">Energía</label>
+                        <div class="contenedor-barra">
+                            <div id="barra-energia" class="barra" style="width: 60%;"></div>
+                        </div>
+                    </div>
+                    <div class="estado">
+                        <label for="barra-salud">Salud</label>
+                        <div class="contenedor-barra">
+                            <div id="barra-salud" class="barra" style="width: 60%;"></div>
+                        </div>
+                    </div>
+                    <div class="estado">
+                        <label for="barra-aburrimiento">Aburrimiento</label>
+                        <div class="contenedor-barra">
+                            <div id="barra-aburrimiento" class="barra" style="width: 60%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dragón centrado -->
+            <div class="contenedor-dragon">
+                <div id="log-mensajes"></div>
+                <video id="tamagotchi-video" width="320" height="240" autoplay loop muted>
+                    <source src="" type="video/mp4">
+                    Tu navegador no soporta la etiqueta de video.
+                </video>
+            </div>
+        </div>
+
+        <div id="contador-tiempo">
+            <span id="tiempo-transcurrido" style="display: none;">0</span> 
+        </div>
+
+
+        <!-- Botones debajo del dragón -->
+        <div class="botones">
+            <button id="alimentar">Alimentar</button>
+            <button id="jugar">Jugar</button>
+            <button id="dormir">Dormir</button>
+            <button id="curar" style="display: none;">Curar</button>
+            <button id="pip-button" class="boton-pip">Minimizar</button>
+        </div>
+    </div>  
+    <script src="tamagotchifinal.js"></script>
+    <script src="mainNuevo.js" type="module"></script>  
+</body>
+</html>
