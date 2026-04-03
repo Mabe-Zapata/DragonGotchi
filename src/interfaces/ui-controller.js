@@ -4,9 +4,10 @@ import { Feliz, Hambriento, Cansado, Critico, Muerto } from '../domain/states/ta
 import { DomEventManager } from './events/dom-event-manager.js';
 
 export class UIController {
-    constructor(repository, uiProvider) {
+    constructor(repository, uiProvider, stateEvaluator) {
         this.repository = repository;
         this.ui = uiProvider;
+        this.stateEvaluator = stateEvaluator;
         this.tamagotchi = null;
         this.actionUseCase = null;
         this.tickUseCase = null;
@@ -46,7 +47,7 @@ export class UIController {
         this.tamagotchi.setEstado(new StateClass(this.tamagotchi));
         
         this.actionUseCase = new ActionUseCase(this.tamagotchi, this.repository);
-        this.tickUseCase = new TickUseCase(this.tamagotchi, this.repository);
+        this.tickUseCase = new TickUseCase(this.tamagotchi, this.repository, this.stateEvaluator);
         
         this.ui.actualizarBarras(this.tamagotchi);
         this.iniciarReloj();

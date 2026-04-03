@@ -1,5 +1,3 @@
-import { Feliz, Hambriento, Cansado, Critico, Muerto } from '../../domain/states/tamagotchi-states.js';
-
 export class ActionUseCase {
     constructor(tamagotchi, repository) {
         this.tamagotchi = tamagotchi;
@@ -28,9 +26,10 @@ export class ActionUseCase {
 }
 
 export class TickUseCase {
-    constructor(tamagotchi, repository) {
+    constructor(tamagotchi, repository, stateEvaluator) {
         this.tamagotchi = tamagotchi;
         this.repository = repository;
+        this.stateEvaluator = stateEvaluator;
     }
 
     execute() {
@@ -47,16 +46,14 @@ export class TickUseCase {
         }
         
         this.tamagotchi.actualizarAtributos(delta);
-        this.tamagotchi.setEstado(this.evaluarEstado(this.tamagotchi));
+        
+        // OCP: El evaluador decide el nuevo estado basado en reglas externas
+        const nuevoEstado = this.stateEvaluator.evaluate(this.tamagotchi);
+        if (nuevoEstado) {
+            this.tamagotchi.setEstado(nuevoEstado);
+        }
+
         this.repository.save(this.tamagotchi);
         this.tamagotchi.ui.actualizarBarras(this.tamagotchi);
-    }
-
-    evaluarEstado(tamagotchi) {
-        // Business logic for state evaluation
-        if (tamagotchi.salud < 30 || tamagotchi.hambre > 80 || tamagotchi.energia <= 15) return new Critico(tamagotchi);
-        if (tamagotchi.energia <= 30) return new Cansado(tamagotchi);
-        if (tamagotchi.hambre >= 50) return new Hambriento(tamagotchi);
-        return new Feliz(tamagotchi);
     }
 }

@@ -2,11 +2,27 @@ export class Estado {
     constructor(tamagotchi) {
         this.tamagotchi = tamagotchi;
     }
-    alimentar() { throw new Error('Método no implementado'); }
-    jugar() { throw new Error('Método no implementado'); }
-    dormir() { throw new Error('Método no implementado'); }
-    curar() { throw new Error('Método no implementado'); }
-    getAnimationName() { throw new Error('Método no implementado'); }
+    
+    // Comportamientos por defecto (LSP - Substituibilidad)
+    alimentar() { 
+        this.tamagotchi.ui.mostrarMensaje(`${this.tamagotchi.nombre} no tiene ganas de comer ahora.`);
+    }
+    
+    jugar() { 
+        this.tamagotchi.ui.mostrarMensaje(`${this.tamagotchi.nombre} no tiene ganas de jugar ahora.`);
+    }
+    
+    dormir() { 
+        this.tamagotchi.ui.mostrarMensaje(`${this.tamagotchi.nombre} no tiene sueño ahora.`);
+    }
+    
+    curar() { 
+        this.tamagotchi.ui.mostrarMensaje(`${this.tamagotchi.nombre} no necesita que lo curen.`);
+    }
+
+    getAnimationName() {
+        return 'feliz'; // Por defecto
+    }
 }
 
 export class Feliz extends Estado {
