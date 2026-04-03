@@ -26,10 +26,11 @@ export class ActionUseCase {
 }
 
 export class TickUseCase {
-    constructor(tamagotchi, repository, stateEvaluator) {
+    constructor(tamagotchi, repository, stateEvaluator, statsPresenter) {
         this.tamagotchi = tamagotchi;
         this.repository = repository;
         this.stateEvaluator = stateEvaluator;
+        this.statsPresenter = statsPresenter;
     }
 
     execute() {
@@ -47,13 +48,15 @@ export class TickUseCase {
         
         this.tamagotchi.actualizarAtributos(delta);
         
-        // OCP: El evaluador decide el nuevo estado basado en reglas externas
         const nuevoEstado = this.stateEvaluator.evaluate(this.tamagotchi);
         if (nuevoEstado) {
             this.tamagotchi.setEstado(nuevoEstado);
         }
 
         this.repository.save(this.tamagotchi);
-        this.tamagotchi.ui.actualizarBarras(this.tamagotchi);
+        
+        if (this.statsPresenter) {
+            this.statsPresenter.actualizarBarras(this.tamagotchi);
+        }
     }
 }

@@ -16,14 +16,16 @@ export class Tamagotchi {
         this.onAction = null;
     }
 
-    setUIProvider(uiProvider) {
-        this.ui = uiProvider;
+    setUI(notifier, animator, minigame) {
+        this.notifier = notifier;
+        this.animator = animator;
+        this.minigame = minigame;
     }
 
     setEstado(estado) {
         this.estado = estado;
-        if (this.ui) {
-            this.ui.cambiarAnimacion(this.estado.getAnimationName());
+        if (this.animator) {
+            this.animator.cambiarAnimacion(this.estado.getAnimationName());
         }
     }
 
@@ -49,9 +51,11 @@ export class Tamagotchi {
 
     matar() {
         this.vivo = false;
-        if (this.ui) {
-            this.ui.mostrarMensaje(`${this.nombre} ha fallecido. 💀`);
-            this.ui.cambiarAnimacion('muerto');
+        if (this.notifier) {
+            this.notifier.mostrarMensaje(`${this.nombre} ha fallecido. 💀`);
+        }
+        if (this.animator) {
+            this.animator.cambiarAnimacion('muerto');
         }
     }
 

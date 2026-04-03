@@ -1,6 +1,9 @@
 import { UIController } from '../interfaces/ui-controller.js';
 import { LocalStorageRepository } from '../infrastructure/persistence/local-storage-repository.js';
-import { DomUIProvider } from '../infrastructure/ui/dom-ui-provider.js';
+import { DomNotifier } from '../infrastructure/ui/dom-notifier.js';
+import { DomAnimator } from '../infrastructure/ui/dom-animator.js';
+import { DomStatsPresenter } from '../infrastructure/ui/dom-stats-presenter.js';
+import { DomMinigameProvider } from '../infrastructure/ui/dom-minigame-provider.js';
 import { StateEvaluator } from '../application/services/state-evaluator.js';
 import { Feliz, Hambriento, Cansado, Critico } from '../domain/states/tamagotchi-states.js';
 
@@ -26,10 +29,21 @@ window.addEventListener('DOMContentLoaded', () => {
     ];
 
     const repository = new LocalStorageRepository();
-    const uiProvider = new DomUIProvider();
+    const notifier = new DomNotifier();
+    const animator = new DomAnimator();
+    const statsPresenter = new DomStatsPresenter();
+    const minigame = new DomMinigameProvider();
+    
     const stateEvaluator = new StateEvaluator(stateRules);
     
-    // Inyectamos todo en el controlador (DIP)
-    const app = new UIController(repository, uiProvider, stateEvaluator);
+    // Inyectamos todo segregado (ISP + DIP)
+    const app = new UIController(
+        repository, 
+        notifier, 
+        animator, 
+        statsPresenter, 
+        minigame, 
+        stateEvaluator
+    );
     app.start();
 });

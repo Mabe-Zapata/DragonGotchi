@@ -4,16 +4,19 @@ import { Feliz, Hambriento, Cansado, Critico, Muerto } from '../domain/states/ta
 import { DomEventManager } from './events/dom-event-manager.js';
 
 export class UIController {
-    constructor(repository, uiProvider, stateEvaluator) {
+    constructor(repository, notifier, animator, statsPresenter, minigame, stateEvaluator) {
         this.repository = repository;
-        this.ui = uiProvider;
+        this.notifier = notifier;
+        this.animator = animator;
+        this.statsPresenter = statsPresenter;
+        this.minigame = minigame;
         this.stateEvaluator = stateEvaluator;
+        
         this.tamagotchi = null;
         this.actionUseCase = null;
         this.tickUseCase = null;
         this.temporizador = null;
         
-        // DomEventManager initialization with callbacks
         this.eventManager = new DomEventManager({
             onAdopt: () => this.handleAdopt(),
             onAction: (action) => this.actionUseCase[action](),
@@ -23,44 +26,39 @@ export class UIController {
         });
     }
 
-    start() {
-        const savedData = this.repository.load();
-        if (savedData && savedData.vivo) {
-            this.bootstrap(savedData.nombre, savedData);
-            this.showGameContent();
-        } else if (savedData && !savedData.vivo) {
-            this.manejarMuerte();
+    async start() {
+        const initialState = this.repository.load();
+        if (initialState) {
+            this.bootstrap(initialState);
+            this.notifier.mostrarMensaje(`¡Bienvenido de nuevo, ${this.tamagotchi.nombre}!`);
         } else {
-            document.getElementById('formulario-nombre').style.display = 'block';
+            // Mostrar pantalla inicial si no hay datos guardados
             document.getElementById('pantalla-inicial').style.display = 'flex';
         }
-
-        this.eventManager.init();
     }
 
-    bootstrap(nombre, initialState = {}) {
-        this.tamagotchi = new Tamagotchi(nombre, initialState);
-        this.tamagotchi.setUIProvider(this.ui);
+    bootstrap(initialState) {
+        this.tamagotchi = new Tamagotchi(initialState.nombre, initialState);
+        this.tamagotchi.setUI(this.notifier, this.animator, this.minigame);
         
         const stateMap = { Feliz, Hambriento, Cansado, Critico, Muerto };
         const StateClass = stateMap[initialState.estadoClase || 'Feliz'];
         this.tamagotchi.setEstado(new StateClass(this.tamagotchi));
         
         this.actionUseCase = new ActionUseCase(this.tamagotchi, this.repository);
-        this.tickUseCase = new TickUseCase(this.tamagotchi, this.repository, this.stateEvaluator);
+        this.tickUseCase = new TickUseCase(this.tamagotchi, this.repository, this.stateEvaluator, this.statsPresenter);
         
-        this.ui.actualizarBarras(this.tamagotchi);
+        this.statsPresenter.actualizarBarras(this.tamagotchi);
         this.iniciarReloj();
     }
 
     handleAdopt() {
-        const nombreElement = document.getElementById('nombre-tamagotchi');
-        const nombre = nombreElement.value.trim();
-        if (nombre) {
-            this.bootstrap(nombre);
-            this.repository.save(this.tamagotchi);
-            this.animacionInicial();
-        }
+        const nombre = document.getElementById('pet-name').value || 'Dragon';
+        document.getElementById('pantalla-inicial').style.display = 'none';
+        
+        this.bootstrap({ nombre, vivo: true });
+        this.notifier.mostrarMensaje(`¡Has adoptado a ${nombre}!`);
+        this.animacionInicial();
     }
 
     handleReset() {
