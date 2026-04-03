@@ -1,27 +1,38 @@
 export class ActionUseCase {
-    constructor(tamagotchi, repository) {
+    constructor(tamagotchi, repository, stateEvaluator) {
         this.tamagotchi = tamagotchi;
         this.repository = repository;
+        this.stateEvaluator = stateEvaluator;
     }
 
     alimentar() {
-        this.tamagotchi.alimentar();
-        this.repository.save(this.tamagotchi);
+        return this.executeAction('alimentar');
     }
 
     jugar() {
-        this.tamagotchi.jugar();
-        this.repository.save(this.tamagotchi);
+        return this.executeAction('jugar');
     }
 
     dormir() {
-        this.tamagotchi.dormir();
-        this.repository.save(this.tamagotchi);
+        return this.executeAction('dormir');
     }
 
     curar() {
-        this.tamagotchi.curar();
+        return this.executeAction('curar');
+    }
+
+    executeAction(action) {
+        this.tamagotchi[action]();
+
+        if (this.tamagotchi.vivo && this.stateEvaluator) {
+            const nuevoEstado = this.stateEvaluator.evaluate(this.tamagotchi);
+            if (nuevoEstado) {
+                this.tamagotchi.setEstado(nuevoEstado);
+            }
+        }
+
         this.repository.save(this.tamagotchi);
+        return this.tamagotchi;
     }
 }
 

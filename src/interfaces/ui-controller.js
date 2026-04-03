@@ -19,7 +19,7 @@ export class UIController {
         
         this.eventManager = new DomEventManager({
             onAdopt: () => this.handleAdopt(),
-            onAction: (action) => this.actionUseCase[action](),
+            onAction: (action) => this.handleAction(action),
             onReset: () => this.handleReset(),
             onPip: () => this.handlePip(),
             onContinue: () => this.handleContinue()
@@ -27,13 +27,20 @@ export class UIController {
     }
 
     async start() {
+        this.eventManager.init();
+
         const initialState = this.repository.load();
         if (initialState) {
             this.bootstrap(initialState);
-            this.notifier.mostrarMensaje(`¡Bienvenido de nuevo, ${this.tamagotchi.nombre}!`);
+
+            if (this.tamagotchi.vivo) {
+                this.showContinueScreen();
+                this.notifier.mostrarMensaje(`¡Bienvenido de nuevo, ${this.tamagotchi.nombre}!`);
+            } else {
+                this.manejarMuerte();
+            }
         } else {
-            // Mostrar pantalla inicial si no hay datos guardados
-            document.getElementById('pantalla-inicial').style.display = 'flex';
+            this.showAdoptionScreen();
         }
     }
 
@@ -45,20 +52,39 @@ export class UIController {
         const StateClass = stateMap[initialState.estadoClase || 'Feliz'];
         this.tamagotchi.setEstado(new StateClass(this.tamagotchi));
         
-        this.actionUseCase = new ActionUseCase(this.tamagotchi, this.repository);
+        this.actionUseCase = new ActionUseCase(this.tamagotchi, this.repository, this.stateEvaluator);
         this.tickUseCase = new TickUseCase(this.tamagotchi, this.repository, this.stateEvaluator, this.statsPresenter);
         
         this.statsPresenter.actualizarBarras(this.tamagotchi);
-        this.iniciarReloj();
+
+        if (this.tamagotchi.vivo) {
+            this.iniciarReloj();
+        }
     }
 
     handleAdopt() {
-        const nombre = document.getElementById('pet-name').value || 'Dragon';
-        document.getElementById('pantalla-inicial').style.display = 'none';
+        const nombre = document.getElementById('nombre-tamagotchi').value.trim() || 'Dragon';
         
         this.bootstrap({ nombre, vivo: true });
         this.notifier.mostrarMensaje(`¡Has adoptado a ${nombre}!`);
         this.animacionInicial();
+    }
+
+    handleAction(action) {
+        if (!this.actionUseCase) {
+            return;
+        }
+
+        this.actionUseCase[action]();
+        this.statsPresenter.actualizarBarras(this.tamagotchi);
+
+        if (!this.tamagotchi.vivo) {
+            this.manejarMuerte();
+            if (this.temporizador) {
+                clearInterval(this.temporizador);
+                this.temporizador = null;
+            }
+        }
     }
 
     handleReset() {
@@ -89,12 +115,20 @@ export class UIController {
     animacionInicial() {
         document.getElementById('pantalla-inicial').style.display = 'none';
         document.getElementById('nombre-dragon').textContent = this.tamagotchi.nombre;
-        this.ui.mostrarAnimacionYActualizar('inicio', 3000).then(() => {
-            this.ui.actualizarBarras(this.tamagotchi);
+        this.animator.mostrarAnimacionYActualizar('inicio', 3000).then(() => {
+            this.statsPresenter.actualizarBarras(this.tamagotchi);
         });
     }
 
-    showGameContent() {
+    showAdoptionScreen() {
+        document.getElementById('pantalla-inicial').style.display = 'flex';
+        document.getElementById('pantalla-muerte').style.display = 'none';
+        document.getElementById('continuar-juego').style.display = 'none';
+        document.getElementById('formulario-nombre').style.display = 'block';
+        document.getElementById('mensaje-bienvenida').textContent = '¡Bienvenido! Adoptá un nuevo DragonGotchi.';
+    }
+
+    showContinueScreen() {
         document.getElementById('pantalla-inicial').style.display = 'flex';
         document.getElementById('pantalla-muerte').style.display = 'none';
         document.getElementById('continuar-juego').style.display = 'inline-block';
@@ -104,6 +138,11 @@ export class UIController {
     }
 
     manejarMuerte() {
+        if (this.temporizador) {
+            clearInterval(this.temporizador);
+            this.temporizador = null;
+        }
+
         document.getElementById('pantalla-inicial').style.display = 'none';
         document.getElementById('pantalla-muerte').style.display = 'flex';
         document.getElementById('mensaje-muerte').style.display = 'block';

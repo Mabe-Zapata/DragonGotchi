@@ -5,9 +5,14 @@
 export class DomEventManager {
     constructor(callbacks) {
         this.callbacks = callbacks; // ActionUseCase and Controller methods
+        this.initialized = false;
     }
 
     init() {
+        if (this.initialized) {
+            return;
+        }
+
         this.register('crear-tamagotchi', 'click', this.callbacks.onAdopt);
         this.register('alimentar', 'click', () => this.callbacks.onAction('alimentar'));
         this.register('jugar', 'click', () => this.callbacks.onAction('jugar'));
@@ -16,6 +21,7 @@ export class DomEventManager {
         this.register('reiniciar-Tamagotchi', 'click', this.callbacks.onReset);
         this.register('pip-button', 'click', this.callbacks.onPip);
         this.register('continuar-juego', 'click', this.callbacks.onContinue);
+        this.initialized = true;
     }
 
     register(id, event, callback) {

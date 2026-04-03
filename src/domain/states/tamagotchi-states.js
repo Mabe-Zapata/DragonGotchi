@@ -5,19 +5,19 @@ export class Estado {
     
     // Comportamientos por defecto (LSP - Substituibilidad)
     alimentar() { 
-        this.tamagotchi.ui.mostrarMensaje(`${this.tamagotchi.nombre} no tiene ganas de comer ahora.`);
+        this.tamagotchi.notifier.mostrarMensaje(`${this.tamagotchi.nombre} no tiene ganas de comer ahora.`);
     }
     
     jugar() { 
-        this.tamagotchi.ui.mostrarMensaje(`${this.tamagotchi.nombre} no tiene ganas de jugar ahora.`);
+        this.tamagotchi.notifier.mostrarMensaje(`${this.tamagotchi.nombre} no tiene ganas de jugar ahora.`);
     }
     
     dormir() { 
-        this.tamagotchi.ui.mostrarMensaje(`${this.tamagotchi.nombre} no tiene sueño ahora.`);
+        this.tamagotchi.notifier.mostrarMensaje(`${this.tamagotchi.nombre} no tiene sueño ahora.`);
     }
     
     curar() { 
-        this.tamagotchi.ui.mostrarMensaje(`${this.tamagotchi.nombre} no necesita que lo curen.`);
+        this.tamagotchi.notifier.mostrarMensaje(`${this.tamagotchi.nombre} no necesita que lo curen.`);
     }
 
     getAnimationName() {

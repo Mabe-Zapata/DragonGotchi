@@ -4,6 +4,10 @@ export class LocalStorageRepository {
     }
 
     save(tamagotchi) {
+        const estadoClase = tamagotchi.vivo
+            ? tamagotchi.estado?.constructor?.name || 'Feliz'
+            : 'Muerto';
+
         const data = {
             nombre: tamagotchi.nombre,
             hambre: tamagotchi.hambre,
@@ -13,7 +17,7 @@ export class LocalStorageRepository {
             salud: tamagotchi.salud,
             edad: tamagotchi.edad,
             vivo: tamagotchi.vivo,
-            estadoClase: tamagotchi.estado.constructor.name
+            estadoClase
         };
         localStorage.setItem(this.key, JSON.stringify(data));
     }

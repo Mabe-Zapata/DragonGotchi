@@ -1,3 +1,5 @@
+import { Muerto } from '../states/tamagotchi-states.js';
+
 export class Tamagotchi {
     constructor(nombre, initialState = {}) {
         this.nombre = nombre || 'Tamagotchi';
@@ -50,12 +52,14 @@ export class Tamagotchi {
     }
 
     matar() {
+        if (!this.vivo && this.estado instanceof Muerto) {
+            return;
+        }
+
         this.vivo = false;
+        this.setEstado(new Muerto(this));
         if (this.notifier) {
             this.notifier.mostrarMensaje(`${this.nombre} ha fallecido. 💀`);
-        }
-        if (this.animator) {
-            this.animator.cambiarAnimacion('muerto');
         }
     }
 
@@ -66,5 +70,9 @@ export class Tamagotchi {
         this.salud = Math.min(100, Math.max(0, this.salud + (delta.salud || 0)));
         this.aburrimiento = Math.min(100, Math.max(0, this.aburrimiento + (delta.aburrimiento || 0)));
         this.felicidad = Math.min(100, Math.max(0, this.felicidad + (delta.felicidad || 0)));
+
+        if (this.salud <= 0) {
+            this.matar();
+        }
     }
 }

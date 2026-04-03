@@ -5,11 +5,15 @@ import { DomAnimator } from '../infrastructure/ui/dom-animator.js';
 import { DomStatsPresenter } from '../infrastructure/ui/dom-stats-presenter.js';
 import { DomMinigameProvider } from '../infrastructure/ui/dom-minigame-provider.js';
 import { StateEvaluator } from '../application/services/state-evaluator.js';
-import { Feliz, Hambriento, Cansado, Critico } from '../domain/states/tamagotchi-states.js';
+import { Feliz, Hambriento, Cansado, Critico, Muerto } from '../domain/states/tamagotchi-states.js';
 
 window.addEventListener('DOMContentLoaded', () => {
     // Configuración de reglas de estado (OCP)
     const stateRules = [
+        {
+            condition: t => !t.vivo,
+            stateClass: Muerto
+        },
         { 
             condition: t => t.salud < 30 || t.hambre > 80 || t.energia <= 15, 
             stateClass: Critico 
