@@ -9,8 +9,8 @@ export class INotifier {
 }
 
 export class IAnimator {
-    cambiarAnimacion(nombre) { throw new Error('Not implemented'); }
-    mostrarAnimacionYActualizar(nombre, duracion) { throw new Error('Not implemented'); }
+    cambiarAnimacion(nombre, tamagotchi = null) { throw new Error('Not implemented'); }
+    mostrarAnimacionYActualizar(nombre, duracion, tamagotchi = null) { throw new Error('Not implemented'); }
 }
 
 export class IStatsPresenter {
@@ -20,4 +20,5 @@ export class IStatsPresenter {
 export class IMinigameProvider {
     iniciarMinijuego() { throw new Error('Not implemented'); }
     ocultarMinijuego() { throw new Error('Not implemented'); }
+    estaAbierto() { throw new Error('Not implemented'); }
 }

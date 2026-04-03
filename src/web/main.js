@@ -19,7 +19,7 @@ window.addEventListener('DOMContentLoaded', () => {
             stateClass: Critico 
         },
         { 
-            condition: t => t.energia <= 30, 
+            condition: t => t.energia <= 60, 
             stateClass: Cansado 
         },
         { 

@@ -21,6 +21,7 @@ export class DomEventManager {
         this.register('reiniciar-Tamagotchi', 'click', this.callbacks.onReset);
         this.register('pip-button', 'click', this.callbacks.onPip);
         this.register('continuar-juego', 'click', this.callbacks.onContinue);
+        this.register('cerrar-minijuego', 'click', this.callbacks.onCloseMinigame);
         this.initialized = true;
     }
 

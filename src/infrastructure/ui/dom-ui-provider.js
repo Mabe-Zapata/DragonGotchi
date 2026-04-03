@@ -25,15 +25,15 @@ export class DomUIProvider {
         }, 3000);
     }
 
-    cambiarAnimacion(nombre) {
+    cambiarAnimacion(nombre, tamagotchi = null) {
         this.video.pause();
-        const videoPath = this.videoManager.getVideoPath(nombre);
+        const videoPath = this.videoManager.getVideoPath(nombre, tamagotchi);
         this.video.src = videoPath;
         this.video.play();
     }
 
-    mostrarAnimacionYActualizar(nombre, duracion) {
-        this.cambiarAnimacion(nombre);
+    mostrarAnimacionYActualizar(nombre, duracion, tamagotchi = null) {
+        this.cambiarAnimacion(nombre, tamagotchi);
         return new Promise(resolve => setTimeout(resolve, duracion));
     }
 
