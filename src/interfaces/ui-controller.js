@@ -1,14 +1,12 @@
 import { Tamagotchi } from '../domain/entities/tamagotchi.js';
 import { ActionUseCase, TickUseCase } from '../application/use-cases/actions.js';
-import { DomUIProvider } from '../infrastructure/ui/dom-ui-provider.js';
-import { LocalStorageRepository } from '../infrastructure/persistence/local-storage-repository.js';
 import { Feliz, Hambriento, Cansado, Critico, Muerto } from '../domain/states/tamagotchi-states.js';
 import { DomEventManager } from './events/dom-event-manager.js';
 
 export class UIController {
-    constructor() {
-        this.repository = new LocalStorageRepository();
-        this.ui = new DomUIProvider();
+    constructor(repository, uiProvider) {
+        this.repository = repository;
+        this.ui = uiProvider;
         this.tamagotchi = null;
         this.actionUseCase = null;
         this.tickUseCase = null;
