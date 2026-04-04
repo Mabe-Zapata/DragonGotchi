@@ -3,98 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DragonGotchi - Clean Architecture</title>
-    <!-- Los estilos están en la raíz -->
+    <meta name="description" content="DragonGotchi — Adoptá y cuidá a tu dragón virtual. Un juego tipo Tamagotchi con arquitectura limpia.">
+    <title>DragonGotchi — Tu Dragón Virtual</title>
+    <link rel="icon" href="favicon.ico">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <!-- Styles -->
     <link rel="stylesheet" type="text/css" href="styles.css">
     <link rel="stylesheet" type="text/css" href="pantallaInicial.css">
-    <link rel="icon" href="favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- ═══ Pantalla Inicial: Adopción ═══ -->
     <div id="pantalla-inicial" class="pantalla-superpuesta" style="display: none;">
         <div class="contenedor-inicial">
+            <img src="huevo3.png" alt="Huevo de dragón" class="huevo-decorativo">
             <h2 id="mensaje-bienvenida">¡Bienvenido!</h2>
             <div id="formulario-nombre" style="display: none;">
-                <label for="nombre-tamagotchi">Ingrese el nombre de su Tamagotchi:</label>
-                <input type="text" id="nombre-tamagotchi" placeholder="Nombre">
-                <button id="crear-tamagotchi">Adoptar</button>
+                <label for="nombre-tamagotchi">Dale un nombre a tu nuevo DragonGotchi:</label>
+                <input type="text" id="nombre-tamagotchi" placeholder="Nombre" autocomplete="off" spellcheck="false">
+                <button id="crear-tamagotchi" type="button">Adoptar</button>
             </div>
-            <button id="continuar-juego" style="display: none;">Continuar</button>
+            <button id="continuar-juego" type="button" style="display: none;">Continuar</button>
         </div>
     </div>
 
+    <!-- ═══ Pantalla de Muerte ═══ -->
     <div id="pantalla-muerte" class="pantalla-superpuesta" style="display: none;">
         <div class="contenedor-inicial">
             <h1 id="mensaje-muerte" style="display: none;"></h1>
-            <button id="reiniciar-Tamagotchi" style="display: none;">Reiniciar</button>
+            <button id="reiniciar-Tamagotchi" type="button" style="display: none;">Reiniciar</button>
         </div>
     </div>
 
-    <div class="contenedor-principal">
+    <!-- ═══ Contenedor Principal del Juego ═══ -->
+    <main class="contenedor-principal">
         <div class="contenedor-contenido">
-            <div class="lado-izquierdo">
+            <!-- Panel izquierdo: Nombre y Stats -->
+            <section class="lado-izquierdo" aria-label="Estado del dragón">
                 <div id="nombre-dragon">Nombre del Dragón</div>
-                <div class="barras-estado">
-                    <div class="estado estado--alerta" id="estado-hambre" data-stat="hambre">
-                        <div class="estado-encabezado">
-                            <label id="label-hambre" for="barra-hambre">Hambre</label>
-                            <span id="valor-hambre" class="valor-estado">0%</span>
+                <div class="panel-stats">
+                    <div class="barras-estado">
+                        <div class="estado estado--alerta" id="estado-hambre" data-stat="hambre">
+                            <div class="estado-encabezado">
+                                <label id="label-hambre" for="barra-hambre">Hambre</label>
+                                <span id="valor-hambre" class="valor-estado">0%</span>
+                            </div>
+                            <div class="contenedor-barra" role="progressbar" aria-labelledby="label-hambre" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                                <div id="barra-hambre" class="barra"></div>
+                            </div>
                         </div>
-                        <div class="contenedor-barra" role="progressbar" aria-labelledby="label-hambre" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                            <div id="barra-hambre" class="barra"></div>
+                        <div class="estado estado--positivo" id="estado-felicidad" data-stat="felicidad">
+                            <div class="estado-encabezado">
+                                <label id="label-felicidad" for="barra-felicidad">Felicidad</label>
+                                <span id="valor-felicidad" class="valor-estado">100%</span>
+                            </div>
+                            <div class="contenedor-barra" role="progressbar" aria-labelledby="label-felicidad" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
+                                <div id="barra-felicidad" class="barra"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="estado estado--positivo" id="estado-felicidad" data-stat="felicidad">
-                        <div class="estado-encabezado">
-                            <label id="label-felicidad" for="barra-felicidad">Felicidad</label>
-                            <span id="valor-felicidad" class="valor-estado">100%</span>
+                        <div class="estado estado--energia" id="estado-energia" data-stat="energia">
+                            <div class="estado-encabezado">
+                                <label id="label-energia" for="barra-energia">Energía</label>
+                                <span id="valor-energia" class="valor-estado">100%</span>
+                            </div>
+                            <div class="contenedor-barra" role="progressbar" aria-labelledby="label-energia" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
+                                <div id="barra-energia" class="barra"></div>
+                            </div>
                         </div>
-                        <div class="contenedor-barra" role="progressbar" aria-labelledby="label-felicidad" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
-                            <div id="barra-felicidad" class="barra"></div>
+                        <div class="estado estado--positivo" id="estado-salud" data-stat="salud">
+                            <div class="estado-encabezado">
+                                <label id="label-salud" for="barra-salud">Salud</label>
+                                <span id="valor-salud" class="valor-estado">100%</span>
+                            </div>
+                            <div class="contenedor-barra" role="progressbar" aria-labelledby="label-salud" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
+                                <div id="barra-salud" class="barra"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="estado estado--energia" id="estado-energia" data-stat="energia">
-                        <div class="estado-encabezado">
-                            <label id="label-energia" for="barra-energia">Energía</label>
-                            <span id="valor-energia" class="valor-estado">100%</span>
-                        </div>
-                        <div class="contenedor-barra" role="progressbar" aria-labelledby="label-energia" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
-                            <div id="barra-energia" class="barra"></div>
-                        </div>
-                    </div>
-                    <div class="estado estado--positivo" id="estado-salud" data-stat="salud">
-                        <div class="estado-encabezado">
-                            <label id="label-salud" for="barra-salud">Salud</label>
-                            <span id="valor-salud" class="valor-estado">100%</span>
-                        </div>
-                        <div class="contenedor-barra" role="progressbar" aria-labelledby="label-salud" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
-                            <div id="barra-salud" class="barra"></div>
-                        </div>
-                    </div>
-                    <div class="estado estado--alerta" id="estado-aburrimiento" data-stat="aburrimiento">
-                        <div class="estado-encabezado">
-                            <label id="label-aburrimiento" for="barra-aburrimiento">Aburrimiento</label>
-                            <span id="valor-aburrimiento" class="valor-estado">0%</span>
-                        </div>
-                        <div class="contenedor-barra" role="progressbar" aria-labelledby="label-aburrimiento" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                            <div id="barra-aburrimiento" class="barra"></div>
+                        <div class="estado estado--alerta" id="estado-aburrimiento" data-stat="aburrimiento">
+                            <div class="estado-encabezado">
+                                <label id="label-aburrimiento" for="barra-aburrimiento">Aburrimiento</label>
+                                <span id="valor-aburrimiento" class="valor-estado">0%</span>
+                            </div>
+                            <div class="contenedor-barra" role="progressbar" aria-labelledby="label-aburrimiento" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                                <div id="barra-aburrimiento" class="barra"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="contenedor-dragon">
+            <!-- Panel central: Dragón -->
+            <section class="contenedor-dragon" aria-label="Dragón virtual">
                 <div id="log-mensajes"></div>
                 <video id="tamagotchi-video" width="320" height="240" autoplay loop muted>
                     <source src="" type="video/mp4">
                 </video>
-            </div>
+            </section>
         </div>
 
         <div id="contador-tiempo">
             <span id="tiempo-transcurrido" style="display: none;">0</span> 
         </div>
 
+        <!-- Panel de Minijuego -->
         <div id="minijuego-container" class="minijuego-panel" hidden>
             <div class="minijuego-panel__header">
                 <div>
@@ -106,16 +119,18 @@
             <iframe id="gameFrame" src="" title="Minijuego DragonGotchi" loading="lazy"></iframe>
         </div>
 
-        <div class="botones">
+        <!-- Botones de Acción -->
+        <nav class="botones" aria-label="Acciones del dragón">
             <button id="alimentar" type="button">Alimentar</button>
             <button id="jugar" type="button">Jugar</button>
             <button id="dormir" type="button">Dormir</button>
             <button id="curar" type="button">Curar</button>
             <button id="pip-button" type="button" class="boton-pip">Minimizar video</button>
             <button id="reiniciar-Tamagotchi-btn" style="display:none">Reiniciar</button>
-        </div>
+        </nav>
         <p id="acciones-ayuda" class="acciones-ayuda" aria-live="polite"></p>
-    </div>  
+    </main>
+
     <script src="src/web/main.js" type="module"></script>  
 </body>
 </html>

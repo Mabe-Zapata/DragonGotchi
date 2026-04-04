@@ -1,10 +1,132 @@
-/* Estilo global del cuerpo */
+/* ═══════════════════════════════════════════════════════════
+   DragonGotchi — "Dragon's Lair Retro-Premium" Design System
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Phase 1: Design Tokens ────────────────────────────────── */
+:root {
+    /* Paleta Dragon's Lair */
+    --color-gold:          #F1C40F;
+    --color-gold-dark:     #D4AC0D;
+    --color-gold-light:    #f8e79b;
+    --color-gold-glow:     rgba(241, 196, 15, 0.35);
+    --color-fire-orange:   #E67E22;
+    --color-fire-red:      #C0392B;
+    --color-ember:         #e25822;
+    --color-dragon-purple: #1a0a2e;
+    --color-bg-dark:       #0d0d1a;
+    --color-bg-card:       rgba(15, 10, 30, 0.82);
+    --color-glass:         rgba(241, 196, 15, 0.06);
+    --color-glass-border:  rgba(241, 196, 15, 0.22);
+    --color-text-primary:  #f8e79b;
+    --color-text-muted:    rgba(248, 231, 155, 0.6);
+
+    /* Status Colors */
+    --color-good-start:    #2ecc71;
+    --color-good-end:      #6ee7b7;
+    --color-warn-start:    #f1c40f;
+    --color-warn-end:      #f39c12;
+    --color-crit-start:    #e74c3c;
+    --color-crit-end:      #ff7b72;
+    --color-energy-start:  #22d3ee;
+    --color-energy-end:    #3b82f6;
+
+    /* Typography */
+    --font-pixel:   'Press Start 2P', cursive;
+    --font-display: 'Outfit', sans-serif;
+
+    /* Spacing */
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-xl: 24px;
+
+    /* Shadows */
+    --shadow-glow:   0 0 20px rgba(241, 196, 15, 0.15);
+    --shadow-fire:   0 0 40px rgba(230, 126, 34, 0.18);
+    --shadow-depth:  0 12px 36px rgba(0, 0, 0, 0.5);
+    --shadow-inset:  inset 0 2px 8px rgba(0, 0, 0, 0.3);
+
+    /* Transitions */
+    --transition-fast:   0.2s ease-in-out;
+    --transition-normal: 0.35s ease-in-out;
+    --transition-slow:   0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+
+/* ── Phase 1: Global Keyframes ─────────────────────────────── */
+
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 8px var(--color-gold-glow); }
+    50%      { box-shadow: 0 0 22px var(--color-gold-glow), 0 0 40px rgba(241, 196, 15, 0.1); }
+}
+
+@keyframes fade-in-up {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-out-down {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(10px); }
+}
+
+@keyframes shimmer {
+    0%   { background-position: -200% center; }
+    100% { background-position: 200% center; }
+}
+
+@keyframes bar-shine {
+    0%, 90%  { opacity: 0; left: -40%; }
+    95%      { opacity: 0.5; }
+    100%     { opacity: 0; left: 110%; }
+}
+
+@keyframes breathe {
+    0%, 100% { box-shadow: 0 0 18px rgba(241, 196, 15, 0.12), var(--shadow-depth); }
+    50%      { box-shadow: 0 0 32px rgba(241, 196, 15, 0.22), var(--shadow-depth); }
+}
+
+@keyframes text-glow {
+    0%, 100% { text-shadow: 0 0 8px rgba(241, 196, 15, 0.3); }
+    50%      { text-shadow: 0 0 18px rgba(241, 196, 15, 0.5), 0 0 40px rgba(241, 196, 15, 0.15); }
+}
+
+@keyframes pulse-critical {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.7; }
+}
+
+@keyframes float-egg {
+    0%, 100% { transform: translateY(0px); }
+    50%      { transform: translateY(-8px); }
+}
+
+@keyframes shake-death {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-3px); }
+    20%, 40%, 60%, 80%      { transform: translateX(3px); }
+}
+
+@keyframes border-pulse-red {
+    0%, 100% { border-color: rgba(192, 57, 43, 0.5); }
+    50%      { border-color: rgba(231, 76, 60, 0.8); }
+}
+
+
+/* ── Phase 1: Body & Background ────────────────────────────── */
+
+* {
+    box-sizing: border-box;
+}
+
 body {
-    font-family: 'Press Start 2P', cursive;
+    font-family: var(--font-pixel);
     text-align: center;
-    background-image: url('pared.png'); /* Imagen de fondo */
+    background-color: var(--color-bg-dark);
+    background-image: url('pared.png');
     background-size: cover;
     background-position: center;
+    background-attachment: fixed;
     margin: 0;
     min-height: 100vh;
     display: flex;
@@ -12,10 +134,32 @@ body {
     justify-content: center;
     align-items: center;
     padding: 24px;
-    box-sizing: border-box;
+    position: relative;
+    overflow-x: hidden;
 }
 
-/* Contenedor principal */
+/* Dark overlay gradient on top of background image */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at 50% 30%, rgba(26, 10, 46, 0.65) 0%, transparent 70%),
+        radial-gradient(ellipse at 80% 80%, rgba(192, 57, 43, 0.08) 0%, transparent 50%),
+        linear-gradient(180deg, rgba(13, 13, 26, 0.55) 0%, rgba(13, 13, 26, 0.75) 100%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Everything sits above the overlay */
+body > * {
+    position: relative;
+    z-index: 1;
+}
+
+
+/* ── Phase 1 & 3: Contenedor Principal ─────────────────────── */
+
 .contenedor-principal {
     display: flex;
     flex-direction: column;
@@ -24,37 +168,62 @@ body {
     width: min(1200px, 100%);
 }
 
-/* Contenedor interno: Barras y Dragón */
 .contenedor-contenido {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 40px;
     justify-content: center;
     flex-wrap: wrap;
     width: 100%;
 }
 
-/* Lado izquierdo: Barras y nombre */
+
+/* ── Phase 3: Lado Izquierdo ───────────────────────────────── */
+
 .lado-izquierdo {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 20px;
+    gap: 16px;
 }
 
-/* Nombre del Dragón */
+
+/* ── Phase 3: Nombre del Dragón ────────────────────────────── */
+
 #nombre-dragon {
-    font-family: 'Press Start 2P', sans-serif;
-    color: #D4AC0D;
-    font-size: 20px;
+    font-family: var(--font-pixel);
+    font-size: 22px;
     text-align: left;
+    color: transparent;
+    background: linear-gradient(135deg, var(--color-gold), var(--color-fire-orange), var(--color-gold));
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: shimmer 4s linear infinite, text-glow 3s ease-in-out infinite;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+    letter-spacing: 1px;
 }
 
-/* Barras de estado */
+
+/* ── Phase 3: Panel de Stats (Glassmorphism) ───────────────── */
+
+.panel-stats {
+    background: var(--color-bg-card);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--color-glass-border);
+    border-radius: var(--radius-lg);
+    padding: 20px 22px;
+    box-shadow: var(--shadow-glow), var(--shadow-depth);
+}
+
+
+/* ── Phase 3: Barras de Estado ─────────────────────────────── */
+
 .barras-estado {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 14px;
     width: min(340px, 100%);
 }
 
@@ -63,7 +232,7 @@ body {
     flex-direction: column;
     align-items: flex-start;
     width: 100%;
-    gap: 6px;
+    gap: 5px;
 }
 
 .estado-encabezado {
@@ -76,7 +245,8 @@ body {
 
 .estado label,
 .valor-estado {
-    color: #D4AC0D;
+    color: var(--color-text-primary);
+    font-size: 11px;
 }
 
 .estado label {
@@ -84,174 +254,374 @@ body {
 }
 
 .valor-estado {
-    font-size: 11px;
+    font-size: 10px;
     text-align: right;
+    color: var(--color-text-muted);
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: 0.5px;
 }
 
 .contenedor-barra {
     width: 100%;
-    height: 30px;
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 15px;
+    height: 26px;
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 13px;
     overflow: hidden;
     position: relative;
-    border: 2px solid rgba(212, 172, 13, 0.4);
-    box-sizing: border-box;
+    border: 1.5px solid rgba(241, 196, 15, 0.18);
+    box-shadow: var(--shadow-inset);
 }
 
 .barra {
     height: 100%;
     width: 0;
-    transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    border-radius: 13px;
+    transition: width 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.4s ease;
+    position: relative;
+    overflow: hidden;
 }
 
+/* Shine sweep on bars */
+.barra::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -40%;
+    width: 30%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+    animation: bar-shine 6s ease-in-out infinite;
+    animation-delay: calc(var(--bar-index, 0) * 1s);
+}
+
+/* Bar colors by level */
 .estado[data-level='high'] .barra,
 .estado[data-level='good'] .barra {
-    background: linear-gradient(90deg, #2ecc71, #6ee7b7);
+    background: linear-gradient(90deg, var(--color-good-start), var(--color-good-end));
 }
-
 .estado[data-level='medium'] .barra,
 .estado[data-level='warning'] .barra {
-    background: linear-gradient(90deg, #f1c40f, #f39c12);
+    background: linear-gradient(90deg, var(--color-warn-start), var(--color-warn-end));
 }
-
 .estado[data-level='low'] .barra,
 .estado[data-level='critical'] .barra {
-    background: linear-gradient(90deg, #e74c3c, #ff7b72);
+    background: linear-gradient(90deg, var(--color-crit-start), var(--color-crit-end));
+    animation: pulse-critical 1.5s ease-in-out infinite;
 }
 
+/* Energy-specific colors */
 .estado--energia[data-level='high'] .barra,
 .estado--energia[data-level='good'] .barra {
-    background: linear-gradient(90deg, #22d3ee, #3b82f6);
+    background: linear-gradient(90deg, var(--color-energy-start), var(--color-energy-end));
 }
-
 .estado--energia[data-level='medium'] .barra,
 .estado--energia[data-level='warning'] .barra {
     background: linear-gradient(90deg, #38bdf8, #818cf8);
 }
-
 .estado--energia[data-level='low'] .barra,
 .estado--energia[data-level='critical'] .barra {
     background: linear-gradient(90deg, #7c3aed, #c084fc);
+    animation: pulse-critical 1.5s ease-in-out infinite;
 }
 
-/* Dragón centrado */
+/* Stat icons via label pseudo-element */
+#label-hambre::before        { content: '🍖 '; }
+#label-felicidad::before     { content: '😊 '; }
+#label-energia::before       { content: '⚡ '; }
+#label-salud::before         { content: '❤️ '; }
+#label-aburrimiento::before  { content: '😴 '; }
+
+/* Bar stagger animation delays */
+#estado-hambre       { --bar-index: 0; }
+#estado-felicidad    { --bar-index: 1; }
+#estado-energia      { --bar-index: 2; }
+#estado-salud        { --bar-index: 3; }
+#estado-aburrimiento { --bar-index: 4; }
+
+
+/* ── Phase 3: Contenedor del Dragón ────────────────────────── */
+
 .contenedor-dragon {
-    background-color: #000000;
+    background: radial-gradient(ellipse at center bottom, rgba(26, 10, 46, 0.6) 0%, #000 70%);
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
     min-width: 416px;
     min-height: 316px;
-    border-radius: 18px;
-    padding: 8px;
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+    border-radius: var(--radius-lg);
+    padding: 10px;
+    border: 2px solid var(--color-glass-border);
+    animation: breathe 4s ease-in-out infinite;
+}
+
+/* Corner glow accents */
+.contenedor-dragon::before,
+.contenedor-dragon::after {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(20px);
+}
+.contenedor-dragon::before {
+    top: -10px;
+    left: -10px;
+    background: rgba(241, 196, 15, 0.15);
+}
+.contenedor-dragon::after {
+    bottom: -10px;
+    right: -10px;
+    background: rgba(230, 126, 34, 0.12);
 }
 
 #tamagotchi-video {
     width: 400px;
     height: 300px;
-    border: 8px solid #F1C40F;
-    border-radius: 15px;
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
-    background-color: #000000;
+    border: 4px solid var(--color-gold);
+    border-radius: var(--radius-md);
+    box-shadow:
+        0 0 20px rgba(241, 196, 15, 0.15),
+        inset 0 0 30px rgba(0, 0, 0, 0.4);
+    background-color: #000;
+    transition: opacity var(--transition-normal), filter var(--transition-normal);
 }
 
 body.pip-activo #tamagotchi-video {
-    opacity: 0.2;
-    filter: grayscale(0.4);
+    opacity: 0.15;
+    filter: grayscale(0.5) blur(2px);
 }
 
 body.pip-activo .contenedor-dragon::after {
-    content: 'Video en Picture-in-Picture';
+    content: '📺 Video en Picture-in-Picture';
     position: absolute;
     inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #f1c40f;
-    font-size: 12px;
+    color: var(--color-gold);
+    font-size: 11px;
+    font-family: var(--font-display);
+    font-weight: 600;
     padding: 16px;
     pointer-events: none;
+    background: none;
+    filter: none;
+    width: auto;
+    height: auto;
+    border-radius: 0;
 }
 
-/* Botones */
+
+/* ── Phase 3: Botones ──────────────────────────────────────── */
+
 .botones {
     display: flex;
-    gap: 15px;
+    gap: 12px;
     justify-content: center;
     flex-wrap: wrap;
+    padding: 4px 0;
 }
 
 button {
-    background-color: #F1C40F;
-    color: #333;
+    background: linear-gradient(180deg, #f5d020 0%, #d4ac0d 100%);
+    color: #1a0a2e;
     border: none;
-    border-radius: 10px;
-    padding: 10px 20px;
-    font-family: 'Press Start 2P', cursive;
-    font-size: 14px;
+    border-radius: var(--radius-md);
+    padding: 12px 22px;
+    font-family: var(--font-pixel);
+    font-size: 12px;
     cursor: pointer;
-    box-shadow: 0 4px #b89a28;
-    transition: all 0.2s ease-in-out;
+    box-shadow:
+        0 4px 0 #a88a0a,
+        0 6px 12px rgba(0, 0, 0, 0.3);
+    transition:
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast),
+        background var(--transition-fast),
+        filter var(--transition-fast);
+    position: relative;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 button:hover {
-    background-color: #D4AC0D;
-    transform: scale(1.05);
-    box-shadow: 0 6px #a68a23;
+    background: linear-gradient(180deg, #ffe066 0%, #f1c40f 100%);
+    transform: translateY(-2px);
+    box-shadow:
+        0 6px 0 #a88a0a,
+        0 10px 20px rgba(241, 196, 15, 0.2),
+        0 0 15px rgba(241, 196, 15, 0.15);
+}
+
+button:active {
+    transform: translateY(2px);
+    box-shadow:
+        0 1px 0 #a88a0a,
+        0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+button:focus-visible {
+    outline: 3px solid var(--color-gold);
+    outline-offset: 3px;
 }
 
 button:disabled {
-    background-color: #8b7d45;
-    color: rgba(255, 255, 255, 0.75);
+    background: linear-gradient(180deg, #4a4535 0%, #3a3528 100%);
+    color: rgba(200, 190, 155, 0.5);
     cursor: not-allowed;
     box-shadow: none;
-    opacity: 0.65;
     transform: none;
+    filter: grayscale(0.3);
+    text-shadow: none;
 }
 
 button:disabled:hover {
-    background-color: #8b7d45;
+    background: linear-gradient(180deg, #4a4535 0%, #3a3528 100%);
     transform: none;
     box-shadow: none;
+    filter: grayscale(0.3);
+}
+
+/* Button icons via pseudo-elements */
+#alimentar::before { content: '🍖 '; }
+#jugar::before     { content: '🎮 '; }
+#dormir::before    { content: '💤 '; }
+#curar::before     { content: '💊 '; }
+
+/* PiP button special style */
+.boton-pip {
+    background: linear-gradient(180deg, #5dade2 0%, #2e86c1 100%);
+    box-shadow: 0 4px 0 #1a5276, 0 6px 12px rgba(0, 0, 0, 0.3);
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    font-size: 10px;
+}
+
+.boton-pip:hover {
+    background: linear-gradient(180deg, #85c1e9 0%, #5dade2 100%);
+    box-shadow: 0 6px 0 #1a5276, 0 10px 20px rgba(93, 173, 226, 0.2);
 }
 
 .boton-pip.boton-pip--activo {
-    background-color: #5dade2;
-    box-shadow: 0 4px #2e86c1;
+    background: linear-gradient(180deg, #2ecc71 0%, #27ae60 100%);
+    box-shadow: 0 4px 0 #1e8449, 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* Contador de tiempo */
-#contador-tiempo {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 16px;
-    text-align: center;
-    margin-bottom: 10px;
-    color: #D4AC0D; /* Color dorado para destacar */
-    background-color: rgba(0, 0, 0, 0.6); /* Fondo semitransparente */
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Sombra suave */
+.boton-pip::before {
+    content: '📺 ';
 }
+
+
+/* ── Phase 3: Contador de Tiempo ───────────────────────────── */
+
+#contador-tiempo {
+    font-family: var(--font-pixel);
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 8px;
+    color: var(--color-gold);
+    background: var(--color-bg-card);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 10px 18px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-glass-border);
+    box-shadow: var(--shadow-glow);
+}
+
+
+/* ── Phase 4: Log de Mensajes (Speech Bubble) ──────────────── */
+
+#log-mensajes {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100%);
+    width: max(260px, 85%);
+    color: var(--color-text-primary);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1.5;
+    background: var(--color-bg-card);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    padding: 14px 18px;
+    border-radius: var(--radius-md);
+    border: 1.5px solid var(--color-glass-border);
+    text-align: center;
+    box-shadow: var(--shadow-glow), var(--shadow-depth);
+    max-height: 120px;
+    overflow-y: auto;
+    z-index: 20;
+    display: none;
+    animation: fade-in-up 0.35s ease-out;
+}
+
+/* Speech bubble arrow pointing down */
+#log-mensajes::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 8px solid var(--color-glass-border);
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3));
+}
+
+#log-mensajes p {
+    margin: 0;
+}
+
+
+/* ── Phase 4: Texto de Ayuda ───────────────────────────────── */
+
+.acciones-ayuda {
+    color: var(--color-text-muted);
+    font-size: 10px;
+    font-family: var(--font-display);
+    font-weight: 500;
+    line-height: 1.6;
+    min-height: 1.5em;
+    margin: 0;
+    max-width: 900px;
+    padding: 8px 16px;
+    background: rgba(15, 10, 30, 0.5);
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(241, 196, 15, 0.08);
+    transition: color var(--transition-normal);
+}
+
+
+/* ── Phase 5: Panel de Minijuego ───────────────────────────── */
 
 #minijuego-container {
     width: min(100%, 880px);
-    background-color: rgba(0, 0, 0, 0.78);
-    border: 4px solid #F1C40F;
-    padding: 16px;
-    border-radius: 18px;
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
-    box-sizing: border-box;
+    background: var(--color-bg-card);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 2px solid var(--color-gold);
+    padding: 18px;
+    border-radius: var(--radius-xl);
+    box-shadow: 0 0 30px rgba(241, 196, 15, 0.12), var(--shadow-depth);
+    animation: fade-in-up 0.4s var(--transition-slow);
 }
 
 #gameFrame {
     width: 100%;
     height: min(60vh, 520px);
     border: none;
-    border-radius: 12px;
+    border-radius: var(--radius-md);
     background: #000;
+    box-shadow: var(--shadow-inset);
 }
 
 .minijuego-panel__header {
@@ -259,60 +629,58 @@ button:disabled:hover {
     justify-content: space-between;
     align-items: flex-start;
     gap: 16px;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
     text-align: left;
 }
 
 .minijuego-panel__title {
-    color: #F1C40F;
-    margin: 0 0 8px;
-    font-size: 18px;
+    color: var(--color-gold);
+    margin: 0 0 6px;
+    font-size: 16px;
+    font-family: var(--font-pixel);
 }
 
-.minijuego-panel__subtitle,
-.acciones-ayuda {
-    color: #f8e79b;
-    font-size: 11px;
-    line-height: 1.5;
+.minijuego-panel__title::before {
+    content: '🎮 ';
 }
 
 .minijuego-panel__subtitle {
+    color: var(--color-text-muted);
+    font-size: 11px;
+    font-family: var(--font-display);
+    font-weight: 500;
+    line-height: 1.5;
     margin: 0;
 }
 
 .minijuego-panel__close {
     white-space: nowrap;
+    font-size: 10px;
+    background: linear-gradient(180deg, #e74c3c 0%, #c0392b 100%) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 0 #7b241c, 0 6px 12px rgba(0, 0, 0, 0.3) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-.acciones-ayuda {
-    min-height: 1.5em;
-    margin: 0;
-    max-width: 900px;
+.minijuego-panel__close:hover {
+    background: linear-gradient(180deg, #ff6b6b 0%, #e74c3c 100%) !important;
+    box-shadow: 0 6px 0 #7b241c, 0 10px 20px rgba(231, 76, 60, 0.2) !important;
 }
 
-#log-mensajes {
-    position: absolute;
-    top: 10%; /* Mueve el mensaje a la parte superior */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80%; /* Ancho del área de los mensajes */
-    color: #F1C40F; /* Color dorado */
-    font-family: 'Press Start 2P', cursive;
-    font-size: 14px;
-    background-color: rgba(0, 0, 0, 0.7); /* Fondo negro semitransparente */
-    padding: 10px;
-    border-radius: 10px;
-    text-align: center; /* Centra el texto */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Sombra suave */
-    max-height: 100px; /* Altura máxima del contenedor */
-    overflow-y: auto; /* Scroll si hay demasiados mensajes */
-    z-index: 20; /* Asegura que esté encima de otros elementos */
-    display: none; /* Inicialmente oculto */
+.minijuego-panel__close::before {
+    content: '✕ ';
 }
+
+
+/* ── Phase 6: Responsive ───────────────────────────────────── */
 
 @media (max-width: 900px) {
     body {
         padding: 16px;
+    }
+
+    .contenedor-contenido {
+        gap: 24px;
     }
 
     .contenedor-dragon,
@@ -333,5 +701,83 @@ button:disabled:hover {
     .minijuego-panel__header {
         flex-direction: column;
         align-items: stretch;
+    }
+
+    #nombre-dragon {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 12px;
+    }
+
+    .contenedor-contenido {
+        gap: 16px;
+    }
+
+    #nombre-dragon {
+        font-size: 15px;
+        text-align: center;
+        width: 100%;
+    }
+
+    .lado-izquierdo {
+        align-items: center;
+        width: 100%;
+    }
+
+    .barras-estado {
+        width: 100%;
+    }
+
+    .panel-stats {
+        padding: 14px 16px;
+        width: 100%;
+    }
+
+    .botones {
+        gap: 8px;
+    }
+
+    button {
+        padding: 10px 14px;
+        font-size: 10px;
+    }
+
+    .boton-pip {
+        font-size: 9px;
+    }
+
+    #log-mensajes {
+        font-size: 12px;
+        width: 95%;
+    }
+
+    .acciones-ayuda {
+        font-size: 9px;
+    }
+
+    .contenedor-dragon {
+        border-radius: var(--radius-md);
+    }
+
+    #tamagotchi-video {
+        border-width: 3px;
+        border-radius: var(--radius-sm);
+    }
+}
+
+
+/* ── Phase 6: Accessibility - Reduced Motion ───────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
 }

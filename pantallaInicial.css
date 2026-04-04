@@ -1,38 +1,303 @@
+/* ═══════════════════════════════════════════════════════════
+   DragonGotchi — Pantallas Overlay (Bienvenida / Muerte)
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Overlay Base ──────────────────────────────────────────── */
+
 .pantalla-superpuesta {
-    position: fixed; /* Asegura que esté en toda la pantalla */
-    top: 0;
-    left: 0;
-    width: 100%; /* Toma todo el ancho */
-    height: 100%; /* Toma todo el alto */
-    background: rgba(0, 0, 0, 0.8); /* Fondo oscuro con opacidad */
-    display: flex; /* Usamos flexbox */
-    justify-content: center; /* Centrado horizontal */
-    align-items: center; /* Centrado vertical */
-    z-index: 10; /* Coloca este elemento por encima de los demás */
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at 50% 40%, rgba(26, 10, 46, 0.7) 0%, transparent 60%),
+        rgba(0, 0, 0, 0.82);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    animation: fade-in-up 0.5s ease-out;
 }
+
+
+/* ── Modal Card ────────────────────────────────────────────── */
 
 .contenedor-inicial {
-    background: white; /* Fondo blanco para el mensaje */
-    padding: 20px;
-    border-radius: 10px; /* Bordes redondeados */
+    background: linear-gradient(
+        165deg,
+        rgba(26, 10, 46, 0.92) 0%,
+        rgba(15, 10, 30, 0.95) 50%,
+        rgba(26, 10, 46, 0.92) 100%
+    );
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1.5px solid rgba(241, 196, 15, 0.25);
+    padding: 40px 48px;
+    border-radius: 24px;
     text-align: center;
-    font-family: 'Press Start 2P', cursive; /* Estilo retro */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Sombra */
-    max-width: 80%; /* Asegura que no sea demasiado ancho */
+    font-family: var(--font-pixel);
+    box-shadow:
+        0 0 40px rgba(241, 196, 15, 0.08),
+        0 20px 60px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(241, 196, 15, 0.1);
+    max-width: min(520px, 90vw);
+    animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
 }
 
+/* Subtle decorative glow in top-left corner */
+.contenedor-inicial::before {
+    content: '';
+    position: absolute;
+    top: -30px;
+    left: -30px;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(241, 196, 15, 0.12) 0%, transparent 70%);
+    pointer-events: none;
+    border-radius: 50%;
+}
+
+
+/* ── Welcome Title ─────────────────────────────────────────── */
+
+#mensaje-bienvenida {
+    color: #f8e79b;
+    font-size: 18px;
+    margin: 0 0 24px;
+    line-height: 1.6;
+    text-shadow:
+        0 0 10px rgba(241, 196, 15, 0.3),
+        0 0 30px rgba(241, 196, 15, 0.1);
+}
+
+
+/* ── Egg Image (Decorative) ────────────────────────────────── */
+
+.huevo-decorativo {
+    width: 100px;
+    height: auto;
+    margin: 0 auto 20px;
+    display: block;
+    animation: float-egg 3s ease-in-out infinite;
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.5));
+}
+
+
+/* ── Name Input ────────────────────────────────────────────── */
+
+#formulario-nombre {
+    margin-top: 8px;
+}
+
+#formulario-nombre label {
+    color: #f8e79b;
+    font-size: 11px;
+    display: block;
+    margin-bottom: 14px;
+    line-height: 1.6;
+    font-family: var(--font-display, 'Outfit', sans-serif);
+    font-weight: 500;
+}
 
 #nombre-tamagotchi {
-    margin: 10px 0;
-    padding: 5px;
-    font-size: 16px;
+    margin: 0 0 18px;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-family: var(--font-pixel);
+    color: #f8e79b;
+    background: rgba(255, 255, 255, 0.06);
+    border: 2px solid rgba(241, 196, 15, 0.3);
+    border-radius: 12px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    max-width: 280px;
+    text-align: center;
 }
 
-button {
-    background: #f0c420;
+#nombre-tamagotchi::placeholder {
+    color: rgba(248, 231, 155, 0.35);
+}
+
+#nombre-tamagotchi:focus {
+    border-color: #F1C40F;
+    box-shadow: 0 0 16px rgba(241, 196, 15, 0.2);
+}
+
+
+/* ── Adopt Button (Fire Gradient) ──────────────────────────── */
+
+#crear-tamagotchi {
+    background: linear-gradient(180deg, #E67E22 0%, #C0392B 100%);
+    color: #fff;
     border: none;
-    padding: 10px 20px;
+    padding: 14px 36px;
+    font-family: var(--font-pixel);
+    font-size: 14px;
+    border-radius: 14px;
     cursor: pointer;
+    box-shadow:
+        0 4px 0 #7b241c,
+        0 8px 20px rgba(192, 57, 43, 0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    animation: pulse-glow 2.5s ease-in-out infinite;
+    display: inline-block;
+    margin-top: 4px;
+}
+
+#crear-tamagotchi::before {
+    content: '🥚 ';
+}
+
+#crear-tamagotchi:hover {
+    background: linear-gradient(180deg, #f39c12 0%, #e74c3c 100%);
+    transform: translateY(-3px);
+    box-shadow:
+        0 7px 0 #7b241c,
+        0 12px 28px rgba(231, 76, 60, 0.35);
+}
+
+#crear-tamagotchi:active {
+    transform: translateY(2px);
+    box-shadow:
+        0 1px 0 #7b241c,
+        0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+
+/* ── Continue Button ───────────────────────────────────────── */
+
+#continuar-juego {
+    background: linear-gradient(180deg, #2ecc71 0%, #27ae60 100%);
+    color: #fff;
+    border: none;
+    padding: 14px 36px;
+    font-family: var(--font-pixel);
+    font-size: 14px;
+    border-radius: 14px;
+    cursor: pointer;
+    box-shadow:
+        0 4px 0 #1e8449,
+        0 8px 20px rgba(39, 174, 96, 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    margin-top: 8px;
+}
+
+#continuar-juego::before {
+    content: '▶ ';
+}
+
+#continuar-juego:hover {
+    background: linear-gradient(180deg, #58d68d 0%, #2ecc71 100%);
+    transform: translateY(-3px);
+    box-shadow:
+        0 7px 0 #1e8449,
+        0 12px 28px rgba(46, 204, 113, 0.3);
+}
+
+#continuar-juego:active {
+    transform: translateY(2px);
+    box-shadow:
+        0 1px 0 #1e8449,
+        0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+
+/* ── Death Screen Modifier ─────────────────────────────────── */
+
+#pantalla-muerte {
+    background:
+        radial-gradient(ellipse at 50% 50%, rgba(100, 10, 10, 0.4) 0%, transparent 60%),
+        rgba(0, 0, 0, 0.88);
+}
+
+#pantalla-muerte .contenedor-inicial {
+    background: linear-gradient(
+        165deg,
+        rgba(60, 10, 10, 0.92) 0%,
+        rgba(20, 5, 5, 0.95) 50%,
+        rgba(60, 10, 10, 0.92) 100%
+    );
+    border-color: rgba(231, 76, 60, 0.4);
+    box-shadow:
+        0 0 40px rgba(231, 76, 60, 0.1),
+        0 20px 60px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(231, 76, 60, 0.15);
+    animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1), shake-death 0.5s ease 0.3s;
+}
+
+#mensaje-muerte {
+    color: #ff7b72;
     font-size: 16px;
-    font-family: 'Press Start 2P', cursive;
+    margin: 0 0 24px;
+    text-shadow:
+        0 0 10px rgba(231, 76, 60, 0.4),
+        0 0 30px rgba(231, 76, 60, 0.15);
+    line-height: 1.6;
+}
+
+#mensaje-muerte::before {
+    content: '💀 ';
+}
+
+#reiniciar-Tamagotchi {
+    background: linear-gradient(180deg, #E67E22 0%, #C0392B 100%);
+    color: #fff;
+    padding: 14px 36px;
+    font-size: 13px;
+    border-radius: 14px;
+    box-shadow:
+        0 4px 0 #7b241c,
+        0 8px 20px rgba(192, 57, 43, 0.3);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+#reiniciar-Tamagotchi::before {
+    content: '🔄 ';
+}
+
+#reiniciar-Tamagotchi:hover {
+    background: linear-gradient(180deg, #f39c12 0%, #e74c3c 100%);
+    transform: translateY(-3px);
+    box-shadow:
+        0 7px 0 #7b241c,
+        0 12px 28px rgba(231, 76, 60, 0.35);
+}
+
+
+/* ── Responsive for Modals ─────────────────────────────────── */
+
+@media (max-width: 600px) {
+    .contenedor-inicial {
+        padding: 28px 24px;
+        border-radius: 18px;
+    }
+
+    #mensaje-bienvenida {
+        font-size: 14px;
+    }
+
+    .huevo-decorativo {
+        width: 72px;
+    }
+
+    #nombre-tamagotchi {
+        font-size: 12px;
+        max-width: 100%;
+    }
+
+    #crear-tamagotchi,
+    #continuar-juego,
+    #reiniciar-Tamagotchi {
+        padding: 12px 28px;
+        font-size: 12px;
+    }
+
+    #mensaje-muerte {
+        font-size: 13px;
+    }
 }
