@@ -2,29 +2,29 @@ export class VideoManager {
     constructor(basePath = './videos/') {
         this.basePath = basePath;
         this.sources = {
-            aburrido: 'Aburrido.mp4',
-            feliz: 'Feliz.mp4',
-            hambriento: 'Hambriento.mp4',
-            cansado: 'Cansado.mp4',
-            muerto: 'Muerto.mp4',
-            critico: 'Enfermo.mp4',
-            comer: 'Comer.mp4',
-            jugar: 'Jugar.mp4',
-            dormir: 'Dormir.mp4',
-            enojado: 'Enojado.mp4',
-            triste: 'Triste.mp4',
-            preocupado: 'Preocupado.mp4',
-            inicio: 'inicio.mp4'
+            bored:    'Aburrido.mp4',
+            happy:    'Feliz.mp4',
+            hungry:   'Hambriento.mp4',
+            tired:    'Cansado.mp4',
+            dead:     'Muerto.mp4',
+            critical: 'Enfermo.mp4',
+            eat:      'Comer.mp4',
+            play:     'Jugar.mp4',
+            sleep:    'Dormir.mp4',
+            angry:    'Enojado.mp4',
+            sad:      'Triste.mp4',
+            worried:  'Preocupado.mp4',
+            start:    'inicio.mp4'
         };
 
         this.aliases = {
-            enfermo: 'critico'
+            sick: 'critical'
         };
     }
 
     getVideoPath(name, tamagotchi = null) {
         const resolvedName = this.resolveVideoName(name, tamagotchi);
-        const fileName = this.sources[resolvedName] || '';
+        const fileName     = this.sources[resolvedName] || '';
         return fileName ? `${this.basePath}${fileName}` : '';
     }
 
@@ -37,59 +37,28 @@ export class VideoManager {
 
         if (tamagotchi) {
             const contextualVideo = this.resolveContextualVideo(tamagotchi);
-            if (contextualVideo) {
-                return contextualVideo;
-            }
+            if (contextualVideo) return contextualVideo;
         }
 
-        if (this.sources[normalizedName]) {
-            return normalizedName;
-        }
+        if (this.sources[normalizedName]) return normalizedName;
 
-        return this.sources.feliz ? 'feliz' : '';
+        return this.sources.happy ? 'happy' : '';
     }
 
     isActionVideo(name) {
-        return ['inicio', 'comer', 'jugar', 'dormir', 'muerto'].includes(name);
+        return ['start', 'eat', 'play', 'sleep', 'dead'].includes(name);
     }
 
     resolveContextualVideo(tamagotchi) {
-        if (!tamagotchi.vivo && this.sources.muerto) {
-            return 'muerto';
-        }
-
-        if (tamagotchi.salud < 30 && this.sources.critico) {
-            return 'critico';
-        }
-
-        if (tamagotchi.hambre >= 90 && this.sources.hambriento) {
-            return 'hambriento';
-        }
-
-        if (tamagotchi.salud < 70 && this.sources.preocupado) {
-            return 'preocupado';
-        }
-
-        if (tamagotchi.energia <= 60 && this.sources.cansado) {
-            return 'cansado';
-        }
-
-        if (tamagotchi.aburrimiento >= 70 && this.sources.aburrido) {
-            return 'aburrido';
-        }
-
-        if (tamagotchi.felicidad <= 25 && this.sources.triste) {
-            return 'triste';
-        }
-
-        if (tamagotchi.felicidad <= 45 && tamagotchi.aburrimiento >= 45 && this.sources.enojado) {
-            return 'enojado';
-        }
-
-        if (tamagotchi.hambre >= 50 && this.sources.hambriento) {
-            return 'hambriento';
-        }
-
-        return this.sources.feliz ? 'feliz' : '';
+        if (!tamagotchi.alive && this.sources.dead)          return 'dead';
+        if (tamagotchi.health  <  30 && this.sources.critical)  return 'critical';
+        if (tamagotchi.hunger  >= 90 && this.sources.hungry)    return 'hungry';
+        if (tamagotchi.health  <  70 && this.sources.worried)   return 'worried';
+        if (tamagotchi.energy  <= 60 && this.sources.tired)     return 'tired';
+        if (tamagotchi.boredom >= 70 && this.sources.bored)     return 'bored';
+        if (tamagotchi.happiness <= 25 && this.sources.sad)     return 'sad';
+        if (tamagotchi.happiness <= 45 && tamagotchi.boredom >= 45 && this.sources.angry) return 'angry';
+        if (tamagotchi.hunger  >= 50 && this.sources.hungry)    return 'hungry';
+        return this.sources.happy ? 'happy' : '';
     }
 }

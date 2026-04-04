@@ -3,14 +3,14 @@ import { INotifier } from '../../domain/interfaces/ui-contracts.js';
 export class DomNotifier extends INotifier {
     constructor() {
         super();
-        this.logMensajes = document.getElementById('log-mensajes');
+        this.messageLog = document.getElementById('log-mensajes');
     }
 
-    mostrarMensaje(mensaje) {
-        this.logMensajes.innerHTML = `<p>${mensaje}</p>`;
-        this.logMensajes.style.display = 'block';
+    showMessage(message) {
+        this.messageLog.innerHTML      = `<p>${message}</p>`;
+        this.messageLog.style.display  = 'block';
         setTimeout(() => {
-            this.logMensajes.style.display = 'none';
+            this.messageLog.style.display = 'none';
         }, 3000);
     }
 }

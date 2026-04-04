@@ -5,48 +5,48 @@ import { DomAnimator } from '../infrastructure/ui/dom-animator.js';
 import { DomStatsPresenter } from '../infrastructure/ui/dom-stats-presenter.js';
 import { DomMinigameProvider } from '../infrastructure/ui/dom-minigame-provider.js';
 import { StateEvaluator } from '../application/services/state-evaluator.js';
-import { Feliz, Hambriento, Cansado, Critico, Muerto } from '../domain/states/tamagotchi-states.js';
+import { Happy, Hungry, Tired, Critical, Dead } from '../domain/states/tamagotchi-states.js';
 
 window.addEventListener('DOMContentLoaded', () => {
-    // Configuración de reglas de estado (OCP)
+    // State rules configuration (OCP)
     const stateRules = [
         {
-            condition: t => !t.vivo,
-            stateClass: Muerto
+            condition: t => !t.alive,
+            stateClass: Dead
         },
-        { 
-            condition: t => t.salud < 30 || t.hambre > 80 || t.energia <= 15, 
-            stateClass: Critico 
+        {
+            condition: t => t.health < 30 || t.hunger > 80 || t.energy <= 15,
+            stateClass: Critical
         },
-        { 
-            condition: t => t.energia <= 60, 
-            stateClass: Cansado 
+        {
+            condition: t => t.energy <= 60,
+            stateClass: Tired
         },
-        { 
-            condition: t => t.hambre >= 50, 
-            stateClass: Hambriento 
+        {
+            condition: t => t.hunger >= 50,
+            stateClass: Hungry
         },
-        { 
-            condition: () => true, // Regla por defecto
-            stateClass: Feliz 
+        {
+            condition: () => true, // Default rule
+            stateClass: Happy
         }
     ];
 
-    const repository = new LocalStorageRepository();
-    const notifier = new DomNotifier();
-    const animator = new DomAnimator();
+    const repository    = new LocalStorageRepository();
+    const notifier      = new DomNotifier();
+    const animator      = new DomAnimator();
     const statsPresenter = new DomStatsPresenter();
-    const minigame = new DomMinigameProvider();
-    
+    const minigame      = new DomMinigameProvider();
+
     const stateEvaluator = new StateEvaluator(stateRules);
-    
-    // Inyectamos todo segregado (ISP + DIP)
+
+    // Inject all segregated dependencies (ISP + DIP)
     const app = new UIController(
-        repository, 
-        notifier, 
-        animator, 
-        statsPresenter, 
-        minigame, 
+        repository,
+        notifier,
+        animator,
+        statsPresenter,
+        minigame,
         stateEvaluator
     );
     app.start();

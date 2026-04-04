@@ -4,24 +4,22 @@
  */
 export class DomEventManager {
     constructor(callbacks) {
-        this.callbacks = callbacks; // ActionUseCase and Controller methods
+        this.callbacks   = callbacks; // ActionUseCase and Controller methods
         this.initialized = false;
     }
 
     init() {
-        if (this.initialized) {
-            return;
-        }
+        if (this.initialized) return;
 
-        this.register('crear-tamagotchi', 'click', this.callbacks.onAdopt);
-        this.register('alimentar', 'click', () => this.callbacks.onAction('alimentar'));
-        this.register('jugar', 'click', () => this.callbacks.onAction('jugar'));
-        this.register('dormir', 'click', () => this.callbacks.onAction('dormir'));
-        this.register('curar', 'click', () => this.callbacks.onAction('curar'));
+        this.register('crear-tamagotchi',   'click', this.callbacks.onAdopt);
+        this.register('alimentar',          'click', () => this.callbacks.onAction('feed'));
+        this.register('jugar',              'click', () => this.callbacks.onAction('play'));
+        this.register('dormir',             'click', () => this.callbacks.onAction('sleep'));
+        this.register('curar',              'click', () => this.callbacks.onAction('heal'));
         this.register('reiniciar-Tamagotchi', 'click', this.callbacks.onReset);
-        this.register('pip-button', 'click', this.callbacks.onPip);
-        this.register('continuar-juego', 'click', this.callbacks.onContinue);
-        this.register('cerrar-minijuego', 'click', this.callbacks.onCloseMinigame);
+        this.register('pip-button',         'click', this.callbacks.onPip);
+        this.register('continuar-juego',    'click', this.callbacks.onContinue);
+        this.register('cerrar-minijuego',   'click', this.callbacks.onCloseMinigame);
         this.initialized = true;
     }
 

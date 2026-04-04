@@ -4,56 +4,56 @@ export class DomStatsPresenter extends IStatsPresenter {
     constructor() {
         super();
         this.stats = {
-            hambre: {
-                barra: document.getElementById('barra-hambre'),
-                valor: document.getElementById('valor-hambre'),
-                estado: document.getElementById('estado-hambre'),
+            hunger: {
+                bar:         document.getElementById('barra-hambre'),
+                value:       document.getElementById('valor-hambre'),
+                statusLabel: document.getElementById('estado-hambre'),
                 inverse: true,
                 labels: { good: 'Controlada', warning: 'Atención', critical: 'Crítica' }
             },
-            felicidad: {
-                barra: document.getElementById('barra-felicidad'),
-                valor: document.getElementById('valor-felicidad'),
-                estado: document.getElementById('estado-felicidad'),
+            happiness: {
+                bar:         document.getElementById('barra-felicidad'),
+                value:       document.getElementById('valor-felicidad'),
+                statusLabel: document.getElementById('estado-felicidad'),
                 inverse: false,
                 labels: { good: 'Alta', warning: 'Media', critical: 'Baja' }
             },
-            energia: {
-                barra: document.getElementById('barra-energia'),
-                valor: document.getElementById('valor-energia'),
-                estado: document.getElementById('estado-energia'),
+            energy: {
+                bar:         document.getElementById('barra-energia'),
+                value:       document.getElementById('valor-energia'),
+                statusLabel: document.getElementById('estado-energia'),
                 inverse: false,
                 labels: { good: 'Alta', warning: 'Media', critical: 'Baja' }
             },
-            salud: {
-                barra: document.getElementById('barra-salud'),
-                valor: document.getElementById('valor-salud'),
-                estado: document.getElementById('estado-salud'),
+            health: {
+                bar:         document.getElementById('barra-salud'),
+                value:       document.getElementById('valor-salud'),
+                statusLabel: document.getElementById('estado-salud'),
                 inverse: false,
                 labels: { good: 'Óptima', warning: 'Inestable', critical: 'Crítica' }
             },
-            aburrimiento: {
-                barra: document.getElementById('barra-aburrimiento'),
-                valor: document.getElementById('valor-aburrimiento'),
-                estado: document.getElementById('estado-aburrimiento'),
+            boredom: {
+                bar:         document.getElementById('barra-aburrimiento'),
+                value:       document.getElementById('valor-aburrimiento'),
+                statusLabel: document.getElementById('estado-aburrimiento'),
                 inverse: true,
                 labels: { good: 'Bajo', warning: 'Subiendo', critical: 'Alto' }
             }
         };
     }
 
-    actualizarBarras(tamagotchi) {
+    updateBars(tamagotchi) {
         Object.entries(this.stats).forEach(([key, config]) => {
-            const value = tamagotchi[key];
-            const level = this.resolveLevel(value, config.inverse);
+            const value     = tamagotchi[key];
+            const level     = this.resolveLevel(value, config.inverse);
             const textLevel = config.labels[level];
 
-            config.barra.style.width = `${value}%`;
-            config.valor.textContent = `${value}% · ${textLevel}`;
-            config.estado.dataset.level = level;
+            config.bar.style.width           = `${value}%`;
+            config.value.textContent         = `${value}% · ${textLevel}`;
+            config.statusLabel.dataset.level = level;
 
-            const progressBar = config.barra.parentElement;
-            progressBar.setAttribute('aria-valuenow', String(value));
+            const progressBar = config.bar.parentElement;
+            progressBar.setAttribute('aria-valuenow',  String(value));
             progressBar.setAttribute('aria-valuetext', `${key} ${value}% ${textLevel}`);
         });
     }
@@ -64,7 +64,6 @@ export class DomStatsPresenter extends IStatsPresenter {
             if (value >= 40) return 'warning';
             return 'good';
         }
-
         if (value >= 70) return 'good';
         if (value >= 40) return 'warning';
         return 'critical';

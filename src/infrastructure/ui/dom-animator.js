@@ -4,55 +4,51 @@ import { VideoManager } from '../video/video-manager.js';
 export class DomAnimator extends IAnimator {
     constructor() {
         super();
-        this.videoManager = new VideoManager();
-        this.video = document.getElementById('tamagotchi-video');
-        this.animacionTemporalActiva = false;
-        this.animacionPendiente = null;
-        this.temporizadorAnimacion = null;
+        this.videoManager            = new VideoManager();
+        this.video                   = document.getElementById('tamagotchi-video');
+        this.temporaryAnimationActive = false;
+        this.pendingAnimation         = null;
+        this.animationTimer           = null;
     }
 
-    cambiarAnimacion(nombre, tamagotchi = null) {
-        if (this.animacionTemporalActiva) {
-            this.animacionPendiente = { nombre, tamagotchi };
+    changeAnimation(name, tamagotchi = null) {
+        if (this.temporaryAnimationActive) {
+            this.pendingAnimation = { name, tamagotchi };
             return;
         }
-
-        this.reproducirAnimacion(nombre, tamagotchi);
+        this.playAnimation(name, tamagotchi);
     }
 
-    mostrarAnimacionYActualizar(nombre, duracion, tamagotchi = null) {
-        if (this.temporizadorAnimacion) {
-            clearTimeout(this.temporizadorAnimacion);
+    showAnimationAndUpdate(name, duration, tamagotchi = null) {
+        if (this.animationTimer) {
+            clearTimeout(this.animationTimer);
         }
 
-        this.animacionTemporalActiva = true;
-        this.reproducirAnimacion(nombre, tamagotchi);
+        this.temporaryAnimationActive = true;
+        this.playAnimation(name, tamagotchi);
 
         return new Promise(resolve => {
-            this.temporizadorAnimacion = setTimeout(() => {
-                this.animacionTemporalActiva = false;
+            this.animationTimer = setTimeout(() => {
+                this.temporaryAnimationActive = false;
 
-                const animacionASincronizar = this.animacionPendiente
-                    || (tamagotchi?.estado ? { nombre: tamagotchi.estado.getAnimationName(), tamagotchi } : null);
+                const animationToSync = this.pendingAnimation
+                    || (tamagotchi?.state ? { name: tamagotchi.state.getAnimationName(), tamagotchi } : null);
 
-                this.animacionPendiente = null;
-                this.temporizadorAnimacion = null;
+                this.pendingAnimation = null;
+                this.animationTimer   = null;
 
-                if (animacionASincronizar) {
-                    this.reproducirAnimacion(animacionASincronizar.nombre, animacionASincronizar.tamagotchi);
+                if (animationToSync) {
+                    this.playAnimation(animationToSync.name, animationToSync.tamagotchi);
                 }
 
                 resolve();
-            }, duracion);
+            }, duration);
         });
     }
 
-    reproducirAnimacion(nombre, tamagotchi = null) {
-        const videoPath = this.videoManager.getVideoPath(nombre, tamagotchi);
-
-        if (!videoPath || !this.video) {
-            return;
-        }
+    playAnimation(name, tamagotchi = null) {
+        const videoPath = this.videoManager.getVideoPath(name, tamagotchi);
+        if (!videoPath || !this.video) return;
 
         this.video.pause();
         this.video.src = videoPath;

@@ -2,63 +2,63 @@ import { VideoManager } from '../video/video-manager.js';
 
 export class DomUIProvider {
     constructor() {
-        this.videoManager = new VideoManager();
-        this.video = document.getElementById('tamagotchi-video');
-        this.logMensajes = document.getElementById('log-mensajes');
-        this.barras = {
-            hambre: document.getElementById('barra-hambre'),
-            felicidad: document.getElementById('barra-felicidad'),
-            energia: document.getElementById('barra-energia'),
-            salud: document.getElementById('barra-salud'),
-            aburrimiento: document.getElementById('barra-aburrimiento')
+        this.videoManager    = new VideoManager();
+        this.video           = document.getElementById('tamagotchi-video');
+        this.messageLog      = document.getElementById('log-mensajes');
+        this.bars = {
+            hunger:    document.getElementById('barra-hambre'),
+            happiness: document.getElementById('barra-felicidad'),
+            energy:    document.getElementById('barra-energia'),
+            health:    document.getElementById('barra-salud'),
+            boredom:   document.getElementById('barra-aburrimiento')
         };
-        this.minijuegoContainer = document.getElementById('minijuego-container');
-        this.gameFrame = document.getElementById('gameFrame');
-        this.relojContainer = document.getElementById('tiempo-transcurrido');
+        this.minigameContainer = document.getElementById('minijuego-container');
+        this.gameFrame         = document.getElementById('gameFrame');
+        this.clockContainer    = document.getElementById('tiempo-transcurrido');
     }
 
-    mostrarMensaje(mensaje) {
-        this.logMensajes.innerHTML = `<p>${mensaje}</p>`;
-        this.logMensajes.style.display = 'block';
+    showMessage(message) {
+        this.messageLog.innerHTML     = `<p>${message}</p>`;
+        this.messageLog.style.display = 'block';
         setTimeout(() => {
-            this.logMensajes.style.display = 'none';
+            this.messageLog.style.display = 'none';
         }, 3000);
     }
 
-    cambiarAnimacion(nombre, tamagotchi = null) {
+    changeAnimation(name, tamagotchi = null) {
         this.video.pause();
-        const videoPath = this.videoManager.getVideoPath(nombre, tamagotchi);
-        this.video.src = videoPath;
+        const videoPath  = this.videoManager.getVideoPath(name, tamagotchi);
+        this.video.src   = videoPath;
         this.video.play();
     }
 
-    mostrarAnimacionYActualizar(nombre, duracion, tamagotchi = null) {
-        this.cambiarAnimacion(nombre, tamagotchi);
-        return new Promise(resolve => setTimeout(resolve, duracion));
+    showAnimationAndUpdate(name, duration, tamagotchi = null) {
+        this.changeAnimation(name, tamagotchi);
+        return new Promise(resolve => setTimeout(resolve, duration));
     }
 
-    actualizarBarras(tamagotchi) {
-        this.barras.hambre.style.width = `${tamagotchi.hambre}%`;
-        this.barras.felicidad.style.width = `${tamagotchi.felicidad}%`;
-        this.barras.energia.style.width = `${tamagotchi.energia}%`;
-        this.barras.salud.style.width = `${tamagotchi.salud}%`;
-        this.barras.aburrimiento.style.width = `${tamagotchi.aburrimiento}%`;
+    updateBars(tamagotchi) {
+        this.bars.hunger.style.width    = `${tamagotchi.hunger}%`;
+        this.bars.happiness.style.width = `${tamagotchi.happiness}%`;
+        this.bars.energy.style.width    = `${tamagotchi.energy}%`;
+        this.bars.health.style.width    = `${tamagotchi.health}%`;
+        this.bars.boredom.style.width   = `${tamagotchi.boredom}%`;
     }
 
-    iniciarMinijuego() {
-        this.minijuegoContainer.style.display = 'block';
+    startMinigame() {
+        this.minigameContainer.style.display = 'block';
         this.gameFrame.src = 'https://arcade.makecode.com/29587-22905-09020-25217';
     }
 
-    ocultarMinijuego() {
-        this.minijuegoContainer.style.display = 'none';
+    hideMinigame() {
+        this.minigameContainer.style.display = 'none';
     }
 
-    bloquearBotones(bloquear) {
-        const botones = document.querySelectorAll(".botones button");
-        botones.forEach(boton => {
-            if (boton.id !== 'curar') {
-                boton.style.display = bloquear ? 'none' : 'inline-block';
+    lockButtons(lock) {
+        const buttons = document.querySelectorAll('.botones button');
+        buttons.forEach(button => {
+            if (button.id !== 'curar') {
+                button.style.display = lock ? 'none' : 'inline-block';
             }
         });
     }

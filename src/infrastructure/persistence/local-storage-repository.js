@@ -1,23 +1,23 @@
 export class LocalStorageRepository {
-    constructor(key = 'tamagotchiEstado') {
+    constructor(key = 'tamagotchiState') {
         this.key = key;
     }
 
     save(tamagotchi) {
-        const estadoClase = tamagotchi.vivo
-            ? tamagotchi.estado?.constructor?.name || 'Feliz'
-            : 'Muerto';
+        const stateClass = tamagotchi.alive
+            ? tamagotchi.state?.constructor?.name || 'Happy'
+            : 'Dead';
 
         const data = {
-            nombre: tamagotchi.nombre,
-            hambre: tamagotchi.hambre,
-            aburrimiento: tamagotchi.aburrimiento,
-            energia: tamagotchi.energia,
-            felicidad: tamagotchi.felicidad,
-            salud: tamagotchi.salud,
-            edad: tamagotchi.edad,
-            vivo: tamagotchi.vivo,
-            estadoClase
+            name:      tamagotchi.name,
+            hunger:    tamagotchi.hunger,
+            boredom:   tamagotchi.boredom,
+            energy:    tamagotchi.energy,
+            happiness: tamagotchi.happiness,
+            health:    tamagotchi.health,
+            age:       tamagotchi.age,
+            alive:     tamagotchi.alive,
+            stateClass
         };
         localStorage.setItem(this.key, JSON.stringify(data));
     }

@@ -5,20 +5,20 @@
  */
 
 export class INotifier {
-    mostrarMensaje(mensaje) { throw new Error('Not implemented'); }
+    showMessage(message) { throw new Error('Not implemented'); }
 }
 
 export class IAnimator {
-    cambiarAnimacion(nombre, tamagotchi = null) { throw new Error('Not implemented'); }
-    mostrarAnimacionYActualizar(nombre, duracion, tamagotchi = null) { throw new Error('Not implemented'); }
+    changeAnimation(name, tamagotchi = null) { throw new Error('Not implemented'); }
+    showAnimationAndUpdate(name, duration, tamagotchi = null) { throw new Error('Not implemented'); }
 }
 
 export class IStatsPresenter {
-    actualizarBarras(tamagotchi) { throw new Error('Not implemented'); }
+    updateBars(tamagotchi) { throw new Error('Not implemented'); }
 }
 
 export class IMinigameProvider {
-    iniciarMinijuego() { throw new Error('Not implemented'); }
-    ocultarMinijuego() { throw new Error('Not implemented'); }
-    estaAbierto() { throw new Error('Not implemented'); }
+    startMinigame() { throw new Error('Not implemented'); }
+    hideMinigame()  { throw new Error('Not implemented'); }
+    isOpen()        { throw new Error('Not implemented'); }
 }

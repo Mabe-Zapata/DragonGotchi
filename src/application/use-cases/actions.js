@@ -1,18 +1,17 @@
 class TamagotchiPersistenceUseCase {
     constructor(tamagotchi, repository, stateEvaluator) {
-        this.tamagotchi = tamagotchi;
-        this.repository = repository;
+        this.tamagotchi    = tamagotchi;
+        this.repository    = repository;
         this.stateEvaluator = stateEvaluator;
     }
 
     syncStateAndPersist() {
-        if (this.tamagotchi.vivo && this.stateEvaluator) {
-            const nuevoEstado = this.stateEvaluator.evaluate(this.tamagotchi);
-            if (nuevoEstado) {
-                this.tamagotchi.setEstado(nuevoEstado);
+        if (this.tamagotchi.alive && this.stateEvaluator) {
+            const newState = this.stateEvaluator.evaluate(this.tamagotchi);
+            if (newState) {
+                this.tamagotchi.setState(newState);
             }
         }
-
         this.repository.save(this.tamagotchi);
         return this.tamagotchi;
     }
@@ -20,34 +19,22 @@ class TamagotchiPersistenceUseCase {
 
 export class ActionUseCase extends TamagotchiPersistenceUseCase {
 
-    alimentar() {
-        return this.executeAction('alimentar');
-    }
-
-    jugar() {
-        return this.executeAction('jugar');
-    }
-
-    dormir() {
-        return this.executeAction('dormir');
-    }
-
-    curar() {
-        return this.executeAction('curar');
-    }
+    feed()  { return this.executeAction('feed');  }
+    play()  { return this.executeAction('play');  }
+    sleep() { return this.executeAction('sleep'); }
+    heal()  { return this.executeAction('heal');  }
 
     executeAction(action) {
-        const availability = this.tamagotchi.getActionAvailability?.();
-        const actionState = availability?.[action];
+        const availability  = this.tamagotchi.getActionAvailability?.();
+        const actionState   = availability?.[action];
 
         if (actionState && !actionState.enabled) {
-            this.tamagotchi.notifier?.mostrarMensaje(actionState.reason);
+            this.tamagotchi.notifier?.showMessage(actionState.reason);
             this.repository.save(this.tamagotchi);
             return this.tamagotchi;
         }
 
         this.tamagotchi[action]();
-
         return this.syncStateAndPersist();
     }
 }
@@ -59,40 +46,37 @@ export class TickUseCase extends TamagotchiPersistenceUseCase {
     }
 
     execute() {
-        if (!this.tamagotchi.vivo) return;
-        
+        if (!this.tamagotchi.alive) return;
+
         const delta = {
-            hambre: 10,
-            energia: -10,
-            aburrimiento: 5
+            hunger:  10,
+            energy:  -10,
+            boredom: 5
         };
 
-        const projectedState = this.tamagotchi.getProjectedAttributes(delta);
+        const projectedState    = this.tamagotchi.getProjectedAttributes(delta);
         const passiveHealthDelta = this.tamagotchi.calculatePassiveHealthDelta(projectedState);
 
         if (passiveHealthDelta !== 0) {
-            delta.salud = (delta.salud || 0) + passiveHealthDelta;
+            delta.health = (delta.health || 0) + passiveHealthDelta;
         }
 
-        this.tamagotchi.actualizarAtributos(delta);
-
+        this.tamagotchi.updateAttributes(delta);
         this.syncStateAndPersist();
-        
+
         if (this.statsPresenter) {
-            this.statsPresenter.actualizarBarras(this.tamagotchi);
+            this.statsPresenter.updateBars(this.tamagotchi);
         }
     }
 }
 
 export class MinigameRecoveryUseCase extends TamagotchiPersistenceUseCase {
     execute() {
-        if (!this.tamagotchi.vivo) {
-            return this.tamagotchi;
-        }
+        if (!this.tamagotchi.alive) return this.tamagotchi;
 
-        this.tamagotchi.actualizarAtributos({
-            felicidad: 2,
-            aburrimiento: -2
+        this.tamagotchi.updateAttributes({
+            happiness: 2,
+            boredom:   -2
         });
 
         return this.syncStateAndPersist();

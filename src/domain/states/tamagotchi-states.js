@@ -1,124 +1,123 @@
-export class Estado {
+export class State {
     constructor(tamagotchi) {
         this.tamagotchi = tamagotchi;
     }
-    
-    // Comportamientos por defecto (LSP - Substituibilidad)
-    alimentar() { 
-        this.tamagotchi.notifier.mostrarMensaje(`${this.tamagotchi.nombre} no tiene ganas de comer ahora.`);
+
+    // Default behaviors (LSP - Liskov Substitution Principle)
+    feed() {
+        this.tamagotchi.notifier.showMessage(`${this.tamagotchi.name} no tiene ganas de comer ahora.`);
     }
-    
-    jugar() { 
-        this.tamagotchi.notifier.mostrarMensaje(`${this.tamagotchi.nombre} no tiene ganas de jugar ahora.`);
+
+    play() {
+        this.tamagotchi.notifier.showMessage(`${this.tamagotchi.name} no tiene ganas de jugar ahora.`);
     }
-    
-    dormir() { 
-        this.tamagotchi.notifier.mostrarMensaje(`${this.tamagotchi.nombre} no tiene sueño ahora.`);
+
+    sleep() {
+        this.tamagotchi.notifier.showMessage(`${this.tamagotchi.name} no tiene sueño ahora.`);
     }
-    
-    curar() { 
-        if (this.tamagotchi.salud >= 70) {
-            this.tamagotchi.notifier.mostrarMensaje(`${this.tamagotchi.nombre} no necesita que lo curen.`);
+
+    heal() {
+        if (this.tamagotchi.health >= 70) {
+            this.tamagotchi.notifier.showMessage(`${this.tamagotchi.name} no necesita que lo curen.`);
             return;
         }
-
-        this.tamagotchi.salud = Math.min(100, this.tamagotchi.salud + 15);
-        this.tamagotchi.notifier.mostrarMensaje(`${this.tamagotchi.nombre} recuperó salud. Salud actual: ${this.tamagotchi.salud}`);
+        this.tamagotchi.health = Math.min(100, this.tamagotchi.health + 15);
+        this.tamagotchi.notifier.showMessage(`${this.tamagotchi.name} recuperó salud. Salud actual: ${this.tamagotchi.health}`);
     }
 
     getAnimationName() {
-        return 'feliz'; // Por defecto
+        return 'happy'; // Default
     }
 }
 
-export class Feliz extends Estado {
-    alimentar() {
-        this.tamagotchi.actualizarAtributos({ hambre: -15, aburrimiento: 10, felicidad: -5 });
-        this.tamagotchi.animator.mostrarAnimacionYActualizar('comer', 5000, this.tamagotchi);
-        this.tamagotchi.notifier.mostrarMensaje(`NAM NAM NAM GALLETITA`);
+export class Happy extends State {
+    feed() {
+        this.tamagotchi.updateAttributes({ hunger: -15, boredom: 10, happiness: -5 });
+        this.tamagotchi.animator.showAnimationAndUpdate('eat', 5000, this.tamagotchi);
+        this.tamagotchi.notifier.showMessage(`NAM NAM NAM GALLETITA`);
     }
-    jugar() {
-        if (this.tamagotchi.energia <= 30) {
-            this.tamagotchi.notifier.mostrarMensaje(`RAWR quiero dormir RAWR`);
+    play() {
+        if (this.tamagotchi.energy <= 30) {
+            this.tamagotchi.notifier.showMessage(`RAWR quiero dormir RAWR`);
             return;
         }
-        this.tamagotchi.animator.mostrarAnimacionYActualizar('jugar', 3500, this.tamagotchi);
-        this.tamagotchi.notifier.mostrarMensaje(`${this.tamagotchi.nombre} salió a jugar un rato.`);
-        this.tamagotchi.minigame.iniciarMinijuego();
+        this.tamagotchi.animator.showAnimationAndUpdate('play', 3500, this.tamagotchi);
+        this.tamagotchi.notifier.showMessage(`${this.tamagotchi.name} salió a jugar un rato.`);
+        this.tamagotchi.minigame.startMinigame();
     }
-    dormir() {
-        this.tamagotchi.notifier.mostrarMensaje(`No estoy cansado, déjame jugar un poco más.`);
-        this.tamagotchi.actualizarAtributos({ felicidad: -10, salud: -10, aburrimiento: 15 });
-        this.tamagotchi.animator.mostrarAnimacionYActualizar('enojado', 5000, this.tamagotchi);
+    sleep() {
+        this.tamagotchi.notifier.showMessage(`No estoy cansado, déjame jugar un poco más.`);
+        this.tamagotchi.updateAttributes({ happiness: -10, health: -10, boredom: 15 });
+        this.tamagotchi.animator.showAnimationAndUpdate('angry', 5000, this.tamagotchi);
     }
-    getAnimationName() { return 'feliz'; }
+    getAnimationName() { return 'happy'; }
 }
 
-export class Hambriento extends Estado {
-    alimentar() {
-        this.tamagotchi.actualizarAtributos({ hambre: -20, felicidad: 10 });
-        this.tamagotchi.animator.mostrarAnimacionYActualizar('comer', 5000, this.tamagotchi);
-        this.tamagotchi.notifier.mostrarMensaje(` RAWR quiero mas comida RAWR `);
+export class Hungry extends State {
+    feed() {
+        this.tamagotchi.updateAttributes({ hunger: -20, happiness: 10 });
+        this.tamagotchi.animator.showAnimationAndUpdate('eat', 5000, this.tamagotchi);
+        this.tamagotchi.notifier.showMessage(` RAWR quiero mas comida RAWR `);
     }
-    jugar() {
-        this.tamagotchi.notifier.mostrarMensaje('No estoy aburrido, tengo hambre.');
-        this.tamagotchi.animator.mostrarAnimacionYActualizar('triste', 5000, this.tamagotchi);
-        this.tamagotchi.actualizarAtributos({ felicidad: -30, salud: -30, aburrimiento: 10 });
+    play() {
+        this.tamagotchi.notifier.showMessage('No estoy aburrido, tengo hambre.');
+        this.tamagotchi.animator.showAnimationAndUpdate('sad', 5000, this.tamagotchi);
+        this.tamagotchi.updateAttributes({ happiness: -30, health: -30, boredom: 10 });
     }
-    dormir() {
-        this.tamagotchi.notifier.mostrarMensaje('No estoy cansado, tengo hambre y te ves jugosito.');
-        this.tamagotchi.actualizarAtributos({ felicidad: -10, salud: -30 });
-        this.tamagotchi.animator.mostrarAnimacionYActualizar('enojado', 5000, this.tamagotchi);
+    sleep() {
+        this.tamagotchi.notifier.showMessage('No estoy cansado, tengo hambre y te ves jugosito.');
+        this.tamagotchi.updateAttributes({ happiness: -10, health: -30 });
+        this.tamagotchi.animator.showAnimationAndUpdate('angry', 5000, this.tamagotchi);
     }
-    getAnimationName() { return 'hambriento'; }
+    getAnimationName() { return 'hungry'; }
 }
 
-export class Cansado extends Estado {
-    dormir() {
-        this.tamagotchi.actualizarAtributos({ energia: 40, salud: 10, hambre: 10, aburrimiento: -5 });
-        this.tamagotchi.animator.mostrarAnimacionYActualizar('dormir', 5000, this.tamagotchi);
-        this.tamagotchi.notifier.mostrarMensaje(`${this.tamagotchi.nombre} descansó y recuperó energía.`);
+export class Tired extends State {
+    sleep() {
+        this.tamagotchi.updateAttributes({ energy: 40, health: 10, hunger: 10, boredom: -5 });
+        this.tamagotchi.animator.showAnimationAndUpdate('sleep', 5000, this.tamagotchi);
+        this.tamagotchi.notifier.showMessage(`${this.tamagotchi.name} descansó y recuperó energía.`);
     }
-    alimentar() {
-        this.tamagotchi.notifier.mostrarMensaje('DORMIR DORMIR SOLO QUIERO DORMIR');
-        this.tamagotchi.actualizarAtributos({ felicidad: -15, energia: -10, salud: -10 });
-        this.tamagotchi.animator.mostrarAnimacionYActualizar('triste', 5000, this.tamagotchi);
+    feed() {
+        this.tamagotchi.notifier.showMessage('DORMIR DORMIR SOLO QUIERO DORMIR');
+        this.tamagotchi.updateAttributes({ happiness: -15, energy: -10, health: -10 });
+        this.tamagotchi.animator.showAnimationAndUpdate('sad', 5000, this.tamagotchi);
     }
-    jugar() {
-        this.tamagotchi.notifier.mostrarMensaje(`RAWR DORMIR DORMIR QUIERO DORMIR`);
-        this.tamagotchi.actualizarAtributos({ felicidad: -30, salud: -30 });
-        this.tamagotchi.animator.mostrarAnimacionYActualizar('triste', 5000, this.tamagotchi);
+    play() {
+        this.tamagotchi.notifier.showMessage(`RAWR DORMIR DORMIR QUIERO DORMIR`);
+        this.tamagotchi.updateAttributes({ happiness: -30, health: -30 });
+        this.tamagotchi.animator.showAnimationAndUpdate('sad', 5000, this.tamagotchi);
     }
-    getAnimationName() { return 'cansado'; }
+    getAnimationName() { return 'tired'; }
 }
 
-export class Critico extends Estado {
-    alimentar() {
-        this.tamagotchi.notifier.mostrarMensaje(`${this.tamagotchi.nombre} comió algo liviano para estabilizarse.`);
-        this.tamagotchi.actualizarAtributos({ salud: 5, hambre: -20, felicidad: 5 });
-        if (this.tamagotchi.salud <= 0) this.tamagotchi.matar();
+export class Critical extends State {
+    feed() {
+        this.tamagotchi.notifier.showMessage(`${this.tamagotchi.name} comió algo liviano para estabilizarse.`);
+        this.tamagotchi.updateAttributes({ health: 5, hunger: -20, happiness: 5 });
+        if (this.tamagotchi.health <= 0) this.tamagotchi.die();
     }
-    jugar() {
-        this.tamagotchi.notifier.mostrarMensaje(`${this.tamagotchi.nombre} no puede jugar en estado crítico.`);
-        this.tamagotchi.actualizarAtributos({ salud: -30, energia: -15 });
-        if (this.tamagotchi.salud <= 0) this.tamagotchi.matar();
+    play() {
+        this.tamagotchi.notifier.showMessage(`${this.tamagotchi.name} no puede jugar en estado crítico.`);
+        this.tamagotchi.updateAttributes({ health: -30, energy: -15 });
+        if (this.tamagotchi.health <= 0) this.tamagotchi.die();
     }
-    dormir() {
-        this.tamagotchi.notifier.mostrarMensaje(`${this.tamagotchi.nombre} descansó un rato para recuperarse.`);
-        this.tamagotchi.actualizarAtributos({ energia: 25, salud: 5, hambre: 10 });
-        if (this.tamagotchi.salud <= 0) this.tamagotchi.matar();
+    sleep() {
+        this.tamagotchi.notifier.showMessage(`${this.tamagotchi.name} descansó un rato para recuperarse.`);
+        this.tamagotchi.updateAttributes({ energy: 25, health: 5, hunger: 10 });
+        if (this.tamagotchi.health <= 0) this.tamagotchi.die();
     }
-    curar() {
-        this.tamagotchi.salud = Math.min(100, this.tamagotchi.salud + 20);
-        this.tamagotchi.notifier.mostrarMensaje(`${this.tamagotchi.nombre} ha sido curado. Salud actual: ${this.tamagotchi.salud}`);
+    heal() {
+        this.tamagotchi.health = Math.min(100, this.tamagotchi.health + 20);
+        this.tamagotchi.notifier.showMessage(`${this.tamagotchi.name} ha sido curado. Salud actual: ${this.tamagotchi.health}`);
     }
-    getAnimationName() { return 'critico'; }
+    getAnimationName() { return 'critical'; }
 }
 
-export class Muerto extends Estado {
-    alimentar() { this.tamagotchi.notifier.mostrarMensaje(`estoy muerto`); }
-    jugar() { this.tamagotchi.notifier.mostrarMensaje(`estoy muerto`); }
-    dormir() { this.tamagotchi.notifier.mostrarMensaje(`estoy muerto`); }
-    curar() { this.tamagotchi.notifier.mostrarMensaje(`estoy muerto`); }
-    getAnimationName() { return 'muerto'; }
+export class Dead extends State {
+    feed()  { this.tamagotchi.notifier.showMessage(`estoy muerto`); }
+    play()  { this.tamagotchi.notifier.showMessage(`estoy muerto`); }
+    sleep() { this.tamagotchi.notifier.showMessage(`estoy muerto`); }
+    heal()  { this.tamagotchi.notifier.showMessage(`estoy muerto`); }
+    getAnimationName() { return 'dead'; }
 }
