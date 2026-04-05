@@ -62,7 +62,10 @@ export class UIController {
         this.tamagotchi.setUI(this.notifier, this.animator, this.minigame);
 
         const stateMap = { Happy, Hungry, Tired, Critical, Dead };
-        const StateClass = stateMap[initialState.stateClass || 'Happy'];
+        let StateClass = stateMap[initialState.stateClass];
+        if (!StateClass) {
+            StateClass = Happy; // Fallback robusto por si hay datos corruptos
+        }
         this.tamagotchi.setState(new StateClass(this.tamagotchi));
 
         this.actionUseCase           = new ActionUseCase(this.tamagotchi, this.repository, this.stateEvaluator);

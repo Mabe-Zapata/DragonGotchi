@@ -9,6 +9,12 @@
     <link rel="stylesheet" type="text/css" href="pantallaInicial.css">
     <link rel="icon" href="favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script>
+        // Si el usuario abre el index.html usando doble click (file://) los módulos ES16 no cargarán por la política CORS
+        if (window.location.protocol === 'file:') {
+            alert('❌ ¡ADVERTENCIA CORS!\nEstás abriendo el juego directamente desde un archivo local.\nLos módulos de Clean Architecture no se cargarán y el juego no funcionará.\nPor favor, corre "node server.js" y abre http://localhost:3000');
+        }
+    </script>
 </head>
 <body>
     <div id="pantalla-inicial" class="pantalla-superpuesta" style="display: none;">
