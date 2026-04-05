@@ -96,7 +96,6 @@
 
             <!-- Panel central: Dragón -->
             <section class="contenedor-dragon" aria-label="Dragón virtual">
-                <div id="log-mensajes"></div>
                 <video id="tamagotchi-video" width="320" height="240" autoplay loop muted>
                     <source src="" type="video/mp4">
                 </video>
@@ -130,6 +129,9 @@
         </nav>
         <p id="acciones-ayuda" class="acciones-ayuda" aria-live="polite"></p>
     </main>
+
+    <!-- Toast de mensajes de confirmación -->
+    <div id="log-mensajes" aria-live="polite"></div>
 
     <script src="src/web/main.js" type="module"></script>  
 </body>
